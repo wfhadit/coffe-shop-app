@@ -14,6 +14,16 @@ export const Login = () => {
   const nav = useNavigate();
   const toast = useToast();
   const userSelector = useSelector((state) => state.auth);
+  const [seePassword, setSeePassword] = useState(false);
+
+  const toastProcessing = () =>
+    toast({
+      title: "Processing",
+      position: "top",
+      duration: 1000,
+      isClosable: true,
+      status: "loading",
+    });
   const toastSuccess = (title = "success", description = "") =>
     toast({
       title: title,
@@ -32,7 +42,7 @@ export const Login = () => {
       status: "error",
       description: description,
     });
-  const [seePassword, setSeePassword] = useState(false);
+
   const formik = useFormik({
     initialValues: {
       username: "",
@@ -43,6 +53,7 @@ export const Login = () => {
       password: Yup.string().required(),
     }),
     onSubmit: async (values) => {
+      toastProcessing();
       await dispatch(userLogin(values))
         .then((result) => {
           if (result === 1) {
@@ -55,7 +66,7 @@ export const Login = () => {
             toastError("Login failed");
           }
         })
-        .catch((err) => toastError("Login failed", err?.message));
+        .catch((err) => toastError("Login failed", err?.response?.message));
     },
   });
   useEffect(() => {
@@ -108,6 +119,7 @@ export const Login = () => {
                 onChange={formik.handleChange}
                 autoFocus
               />
+              <div className="text-danger"> {formik.errors.username}</div>
             </Form.Group>
             <Form.Group className="mb-3" controlId="PasswordLoginForm">
               <Form.Label>Password</Form.Label>
@@ -140,6 +152,7 @@ export const Login = () => {
                   </span>
                 )}
               </div>
+              <div className="text-danger"> {formik.errors.password}</div>
               <div className="w-100 d-flex justify-content-center">
                 <Button
                   variant="primary"
