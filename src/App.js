@@ -1,8 +1,12 @@
-import { Route, Routes } from "react-router-dom";
-import "./App.css";
 import { routes } from "./routes/route";
+import "./App.css";
+import { Navigate, Route, Routes } from "react-router-dom";
+import { LandingPage } from "./pages/landingPage";
+import { Navbar } from "./components/navbar";
+import { useState } from "react";
 
 function App() {
+  const [search, setSearch] = useState("");
   return (
     <Routes>
       {routes.map((route, index) => (
