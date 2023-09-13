@@ -1,5 +1,6 @@
 import { AdminLandingPage } from "../pages/Adminpages/AdminLandingPage";
 import { CashierAccountManagement } from "../pages/Adminpages/CashierAccountManagement";
+import { CashierLandingPage } from "../pages/CashierPages/CashierLandingPage";
 import { Login } from "../pages/Login";
 import { Redirect } from "../pages/Redirect";
 import { ProtectedPage } from "./ProtectedPage";
@@ -30,8 +31,7 @@ export const routes = [
       </ProtectedPage>
     )
   ),
-<<<<<<< Updated upstream
-=======
+
   new RouteClass(
     "/cashier/landing_page",
     (
@@ -40,6 +40,9 @@ export const routes = [
       </ProtectedPage>
     )
   ),
+
   new RouteClass("/dashboard", <AdminLandingPage />),
->>>>>>> Stashed changes
+
+
+
 ];

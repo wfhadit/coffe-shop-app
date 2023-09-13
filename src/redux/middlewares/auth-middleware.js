@@ -13,6 +13,14 @@ export const userLogin = (values) => {
       return data.user.role;
     } catch (err) {
       localStorage.removeItem("cs-token");
+      return err;
     }
+  };
+};
+
+export const userLogout = () => {
+  return async (dispacth) => {
+    localStorage.removeItem("cs-token");
+    dispacth({ type: constant.logout });
   };
 };
