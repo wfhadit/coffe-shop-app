@@ -1,20 +1,20 @@
-import { AdminLandingPage } from "../pages/Adminpages/AdminLandingPage";
-import { CashierAccountManagement } from "../pages/Adminpages/CashierAccountManagement";
-import { CashierLandingPage } from "../pages/CashierPages/CashierLandingPage";
-import { Login } from "../pages/Login";
-import { Redirect } from "../pages/Redirect";
-import { ProtectedPage } from "./ProtectedPage";
+import { AdminLandingPage } from '../pages/Adminpages/AdminLandingPage';
+import { CashierAccountManagement } from '../pages/Adminpages/CashierAccountManagement';
+import { CashierLandingPage } from '../pages/CashierPages/CashierLandingPage';
+import { Login } from '../pages/Login';
+import { Redirect } from '../pages/Redirect';
+import { ProtectedPage } from './ProtectedPage';
 
 class RouteClass {
-  constructor(path = "", element) {
+  constructor(path = '', element) {
     this.path = path;
     this.element = element;
   }
 }
 
 export const routes = [
-  new RouteClass("/", <Redirect />),
-  new RouteClass("/login", <Login />),
+  new RouteClass('/', <Redirect />),
+  new RouteClass('/login', <Login />),
   // new RouteClass(
   //   "/admin/landing_page",
   //   (
@@ -24,7 +24,7 @@ export const routes = [
   //   )
   // ),
   new RouteClass(
-    "/account_management",
+    '/account_management',
     (
       <ProtectedPage needLogin={true} AdminOnly={true}>
         <CashierAccountManagement />
@@ -33,7 +33,7 @@ export const routes = [
   ),
 
   new RouteClass(
-    "/cashier/landing_page",
+    '/cashier/landing_page',
     (
       <ProtectedPage needLogin={true}>
         <CashierLandingPage />
@@ -41,8 +41,5 @@ export const routes = [
     )
   ),
 
-  new RouteClass("/dashboard", <AdminLandingPage />),
-
-
-
+  new RouteClass('/dashboard', <AdminLandingPage />),
 ];
