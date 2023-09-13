@@ -8,7 +8,6 @@ function App() {
   const [search, setSearch] = useState("");
   return (
     <>
-      <Navbar />
       <Routes>
         {routes.map((route, index) => (
           <Route {...route} key={`route-${index}`} />

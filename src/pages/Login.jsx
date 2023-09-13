@@ -58,7 +58,7 @@ export const Login = () => {
         .then((result) => {
           if (result === 1) {
             toastSuccess("Login success");
-            nav(`/admin/landing_page`);
+            nav(`/account_management`);
           } else if (result === 2) {
             toastSuccess("Login success");
             nav(`/cashier/landing_page`);
@@ -71,7 +71,7 @@ export const Login = () => {
   });
   useEffect(() => {
     if (localStorage.getItem("cs-token") && userSelector.role === 1) {
-      nav(`/admin/landing_page`);
+      nav(`/account_management`);
     } else if (localStorage.getItem("cs-token") && userSelector.role === 2) {
       nav(`/cashier/landing_page`);
     }
