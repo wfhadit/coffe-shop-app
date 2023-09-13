@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import defaultImage from "../assets/default-image.jpg";
 import { useEffect, useState } from "react";
-import { api } from "../api/axios";
+import { api } from "../API/api";
 export const ModalInputProduct = ({ isOpen, onClose, fetchProducts, id }) => {
   const [data, setData] = useState({
     imageName: "",
