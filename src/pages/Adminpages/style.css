@@ -1,0 +1,14 @@
+@media screen and (max-width: 340px) {
+  .d-xxs-none {
+    display: none;
+  }
+  Table {
+    font-size: 8px;
+  }
+  h3 {
+    font-size: 10px;
+  }
+  .d-xxs-smallfont {
+    font-size: 8px !important;
+  }
+}
