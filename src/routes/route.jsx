@@ -15,14 +15,14 @@ class RouteClass {
 export const routes = [
   new RouteClass("/", <Redirect />),
   new RouteClass("/login", <Login />),
-  // new RouteClass(
-  //   "/admin/landing_page",
-  //   (
-  //     <ProtectedPage needLogin={true} AdminOnly={true}>
-  //       <AdminLandingPage />
-  //     </ProtectedPage>
-  //   )
-  // ),
+  new RouteClass(
+    "/admin/landing_page",
+    (
+      <ProtectedPage needLogin={true} AdminOnly={true}>
+        <AdminLandingPage />
+      </ProtectedPage>
+    )
+  ),
   new RouteClass(
     "/account_management",
     (
@@ -31,7 +31,6 @@ export const routes = [
       </ProtectedPage>
     )
   ),
-
   new RouteClass(
     "/cashier/landing_page",
     (
@@ -40,9 +39,4 @@ export const routes = [
       </ProtectedPage>
     )
   ),
-
-  new RouteClass("/dashboard", <AdminLandingPage />),
-
-
-
 ];
