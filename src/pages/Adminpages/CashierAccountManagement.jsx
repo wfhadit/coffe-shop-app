@@ -2,7 +2,7 @@ import { Button, Col, Container, Row, Table } from "react-bootstrap";
 import { Header } from "../../components/Header";
 import "./style.css";
 import { api } from "../../API/api";
-import React, { Suspense, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useSelector } from "react-redux";
@@ -11,7 +11,6 @@ import {
   SVGAccountActive,
   SVGAccountBlocked,
 } from "../../components/SVG/SVGperson";
-
 import { ModalCreateNewCashierAccount } from "./ModalCreateNewCashierAccount";
 import { ModalConfirmation } from "../../components/ModalConfirmation";
 import Sidebar from "../../components/Sidebar";
@@ -201,7 +200,7 @@ export const TableDataCashierAccount = ({
         },
       })
       .catch((err) => {
-        toastError("failed", err?.response?.data);
+        return toastError("failed", err?.response?.data);
       });
 
     await fetchCashierAccount();

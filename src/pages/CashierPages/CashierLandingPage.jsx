@@ -5,9 +5,14 @@ export const CashierLandingPage = () => {
   return (
     <div>
       <Header />
-      <Container>
-        <h1>Hellow</h1>
-      </Container>
+      <Row>
+        <Col>
+          <Row></Row>
+          <Row></Row>
+          <Row></Row>
+        </Col>
+        <Col></Col>
+      </Row>
     </div>
   );
 };
