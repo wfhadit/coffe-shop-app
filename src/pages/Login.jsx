@@ -62,7 +62,7 @@ export const Login = () => {
           console.log(result);
           if (result === 1) {
             toastSuccess("Login success");
-            nav(`/account_management`);
+            nav(`/admin/landing_page`);
           } else if (result === 2) {
             toastSuccess("Login success");
             nav(`/cashier/landing_page`);
@@ -78,7 +78,7 @@ export const Login = () => {
   });
   useEffect(() => {
     if (localStorage.getItem("cs-token") && userSelector.role === 1) {
-      nav(`/account_management`);
+      nav(`/admin/landing_page`);
     } else if (localStorage.getItem("cs-token") && userSelector.role === 2) {
       nav(`/cashier/landing_page`);
     }
