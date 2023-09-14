@@ -62,14 +62,10 @@ export const Login = () => {
           console.log(result);
           if (result === 1) {
             toastSuccess("Login success");
-            setTimeout(() => {
-              nav(`/account_management`);
-            }, 2500);
+            nav(`/account_management`);
           } else if (result === 2) {
             toastSuccess("Login success");
-            setTimeout(() => {
-              nav(`/cashier/landing_page`);
-            }, 2500);
+            nav(`/cashier/landing_page`);
           } else {
             toastError("Login failed", result.response?.data);
           }
@@ -82,7 +78,7 @@ export const Login = () => {
   });
   useEffect(() => {
     if (localStorage.getItem("cs-token") && userSelector.role === 1) {
-      nav(`/account_management`);
+      nav(`/admin/landing_page`);
     } else if (localStorage.getItem("cs-token") && userSelector.role === 2) {
       nav(`/cashier/landing_page`);
     }

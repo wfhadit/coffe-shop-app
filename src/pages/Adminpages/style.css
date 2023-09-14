@@ -1,4 +1,4 @@
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 340px) {
   .d-xxs-none {
     display: none;
   }
@@ -10,9 +10,5 @@
   }
   .d-xxs-smallfont {
     font-size: 8px !important;
-  }
-  .col,
-  .container {
-    padding: 0;
   }
 }

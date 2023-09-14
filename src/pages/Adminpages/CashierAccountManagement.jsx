@@ -15,6 +15,12 @@ import { ModalCreateNewCashierAccount } from "./ModalCreateNewCashierAccount";
 import { ModalConfirmation } from "../../components/ModalConfirmation";
 import Sidebar from "../../components/Sidebar";
 import { SVGtrash } from "../../components/SVG/SVGtrash";
+// const ModalCreateNewCashierAccount = React.lazy(() =>
+//   import("./ModalCreateNewCashierAccount")
+// );
+// const ModalConfirmation = React.lazy(() =>
+//   import("../../components/ModalConfirmation")
+// );
 
 export const CashierAccountManagement = () => {
   const [cashier_account, setCashier_account] = useState([]);
@@ -42,10 +48,7 @@ export const CashierAccountManagement = () => {
   const fetchCashierAccount = async () => {
     try {
       const { data } = await api.get(`/users/cashier_account?role=2`, {
-        headers: {
-          "api-key": userSelector.username,
-          Authorization: `Bearer ${localStorage.getItem("cs-token")}`,
-        },
+        headers: { "api-key": userSelector.username },
       });
       setCashier_account(data);
     } catch (err) {
@@ -64,10 +67,7 @@ export const CashierAccountManagement = () => {
       role: 2,
     },
     validationSchema: Yup.object().shape({
-      username: Yup.string()
-        .min(5)
-        .matches(/^(\w|-)+$/, "Only alphanumeric, _ , and - are allowed")
-        .required(),
+      username: Yup.string().min(5).required(),
       password: Yup.string().min(8).required(),
       fullname: Yup.string().min(3).required(),
       email: Yup.string().email().nullable(),
@@ -75,11 +75,6 @@ export const CashierAccountManagement = () => {
       gender: Yup.string().oneOf(["male", "female"]),
     }),
     onSubmit: async (values) => {
-      if (!values.username || !values.password || !values.fullname)
-        return toastError(
-          "Error Creating Account",
-          "Username, password, and fullname are required"
-        );
       try {
         const user = await api.post("/users/new_cashier_account", values, {
           headers: { "api-key": userSelector?.username },
@@ -87,13 +82,11 @@ export const CashierAccountManagement = () => {
         toastSuccess(`Account ${user.username} has been created successfully`);
         fetchCashierAccount();
         setShowModal("");
-        formik.resetForm();
       } catch (err) {
+        console.log(err);
         toastError(
           "Failed to create account",
-          typeof err?.response?.data === "string"
-            ? err?.response?.data
-            : Object.values(err?.response?.data?.errors[0])
+          JSON.stringify(err?.response.data)
         );
       }
     },
@@ -102,7 +95,6 @@ export const CashierAccountManagement = () => {
   useEffect(() => {
     fetchCashierAccount();
   }, []);
-
   return (
     <div>
       <Header />
@@ -202,9 +194,11 @@ export const TableDataCashierAccount = ({
       .catch((err) => {
         return toastError("failed", err?.response?.data);
       });
-
+    console.log(1);
     await fetchCashierAccount();
+    console.log(2);
     toastSuccess("Success", `Success deleting ${account.username} account`);
+    console.log(3);
   };
   return (
     <tr key={`tableRowAccount-${index}`}>
