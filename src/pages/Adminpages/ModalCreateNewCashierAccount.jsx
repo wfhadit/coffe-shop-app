@@ -9,6 +9,7 @@ export const ModalCreateNewCashierAccount = ({
 }) => {
   const handleClose = () => {
     setShowModal("");
+    formik.resetForm();
   };
   return (
     <Modal show={show === "ModalCreateNewCashierAccount"} onHide={handleClose}>
