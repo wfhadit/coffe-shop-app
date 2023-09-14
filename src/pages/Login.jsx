@@ -62,7 +62,7 @@ export const Login = () => {
           console.log(result);
           if (result === 1) {
             toastSuccess("Login success");
-            nav(`/admin/landing_page`);
+            nav(`/account_management`);
           } else if (result === 2) {
             toastSuccess("Login success");
             nav(`/cashier/landing_page`);
