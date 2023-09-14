@@ -39,4 +39,13 @@ export const routes = [
       </ProtectedPage>
     )
   ),
+
+  new RouteClass(
+    "/dashboard",
+    (
+      <ProtectedPage needLogin={true} AdminOnly={true}>
+        <AdminLandingPage />
+      </ProtectedPage>
+    )
+  ),
 ];
