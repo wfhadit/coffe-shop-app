@@ -23,10 +23,10 @@ export const routes = [
   //     </ProtectedPage>
   //   )
   // ),
-  new RouteClass("/", <Redirect />),
-  new RouteClass("/login", <Login />),
+  new RouteClass('/', <Redirect />),
+  new RouteClass('/login', <Login />),
   new RouteClass(
-    "/admin/landing_page",
+    '/admin/landing_page',
     (
       <ProtectedPage needLogin={true} AdminOnly={true}>
         <AdminLandingPage />
@@ -50,16 +50,12 @@ export const routes = [
     )
   ),
 
-  new RouteClass('/dashboard', <AdminLandingPage />),
-
-
   new RouteClass(
-    "/dashboard",
+    '/dashboard',
     (
       <ProtectedPage needLogin={true} AdminOnly={true}>
         <AdminLandingPage />
       </ProtectedPage>
     )
   ),
-
 ];

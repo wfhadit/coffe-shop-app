@@ -77,10 +77,6 @@ export const ModalInputProduct = ({ isOpen, onClose, fetchProducts, id }) => {
     },
   });
 
-  useEffect(() => {
-    fetchProducts();
-  }, [isOpen]);
-
   const remove = async () => {
     try {
       await api.delete(`/products/${id}`);

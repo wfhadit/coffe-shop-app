@@ -44,18 +44,6 @@ export const ProductCard = ({ product, fetchProducts }) => {
   );
 };
 
-export const ProductList = ({ products = [], fetchProducts }) => {
-  return (
-    <PostCard>
-      <Grid className='grid-cols-2 sm:grid-cols-4'>
-        {products?.map((product, idx) => (
-          <GridItem key={idx}>
-            <a>
-              <ProductCard product={product} fetchProducts={fetchProducts} />
-            </a>
-          </GridItem>
-        ))}
-      </Grid>
-    </PostCard>
-  );
+export const ProductList = (props) => {
+  return <PostCard {...props}></PostCard>;
 };
