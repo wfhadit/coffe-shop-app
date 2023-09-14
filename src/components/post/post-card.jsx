@@ -1,5 +1,5 @@
 import debounce from 'lodash.debounce';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { api } from '../../API/api';
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import { useSelector } from 'react-redux';
@@ -12,6 +12,7 @@ export const PostCard = ({ id }) => {
   const [sortBy, setSortBy] = useState(null);
 
   const toast = useToast();
+  const ref = useRef();
 
   const deleteProduct = (productId) => {
     const token = localStorage.getItem('cs-token');
