@@ -1,10 +1,9 @@
 import { Col, Container, Row } from "react-bootstrap";
 import { Header } from "../../components/Header";
-import { Flex, useDisclosure, Center } from "@chakra-ui/react";
+import { useDisclosure, Center } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { ProductList } from "../../components/product";
-import add50 from "../../assets/icons8-plus.svg";
-import { ModalInputProduct } from "../../components/modal";
+
 import { api } from "../../API/api";
 
 export const CashierLandingPage = ({ search }) => {
@@ -33,12 +32,6 @@ export const CashierLandingPage = ({ search }) => {
           <Row></Row>
           <Row></Row>
           <Row></Row>
-          <Center alignItems={"flex-start"} marginTop={"35px"}>
-            <ProductList
-              products={[...products]}
-              fetchProducts={fetchProducts}
-            />
-          </Center>
         </Col>
         <Col></Col>
       </Row>
