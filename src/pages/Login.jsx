@@ -62,14 +62,10 @@ export const Login = () => {
           console.log(result);
           if (result === 1) {
             toastSuccess("Login success");
-            setTimeout(() => {
-              nav(`/account_management`);
-            }, 2500);
+            nav(`/account_management`);
           } else if (result === 2) {
             toastSuccess("Login success");
-            setTimeout(() => {
-              nav(`/cashier/landing_page`);
-            }, 2500);
+            nav(`/cashier/landing_page`);
           } else {
             toastError("Login failed", result.response?.data);
           }

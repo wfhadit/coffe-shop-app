@@ -42,4 +42,7 @@ export const routes = [
   ),
 
   new RouteClass("/dashboard", <AdminLandingPage />),
+
+
+
 ];
