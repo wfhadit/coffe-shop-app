@@ -29,6 +29,10 @@ export const ProductCardCashier = ({
   }, [last_qty]);
 
   useEffect(() => {
+    ref.current = quantity;
+  }, [quantity]);
+
+  useEffect(() => {
     const modifyTransaction = setTimeout(() => {
       if (!last_qty && quantity > 0) {
         currentTransaction?.Transaction_details?.push({
@@ -72,8 +76,8 @@ export const ProductCardCashier = ({
                 })
         }
         // onTouchStart={() => setShowItemController(false)}
-        // onMouseEnter={() => setShowItemController(true)}
-        // onMouseLeave={() => setShowItemController(false)}
+        onMouseEnter={() => setShowItemController(true)}
+        onMouseLeave={() => setShowItemController(false)}
       >
         <Card.Img
           variant="top"

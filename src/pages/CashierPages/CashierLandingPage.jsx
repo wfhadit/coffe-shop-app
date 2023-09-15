@@ -14,8 +14,11 @@ import { api } from "../../API/api";
 import { SearchboxBootstrap } from "../../components/SearchboxBootstrap";
 import { ProductCardCashier } from "../../components/ProductCard";
 import { useSelector } from "react-redux";
+import { useToast } from "@chakra-ui/react";
 
 export const CashierLandingPage = ({ search }) => {
+  const toast = useToast();
+  const [button, setButton] = useState(true);
   const [products, setProducts] = useState([]);
   const [showTransaction, setShowTransaction] = useState(0); // untuk show transaction
   const [newTransaction, setNewTransaction] = useState(false);
@@ -36,12 +39,14 @@ export const CashierLandingPage = ({ search }) => {
     }
   };
   const fetchAnyTransaction = async (transactionId) => {
-    const { data } = await api
-      .get("/transactions/" + transactionId, {
-        headers: { "api-key": userSelector?.username },
-      })
-      .catch((err) => console.log(err));
-    setAnyTransaction(data);
+    if (transactionId) {
+      const { data } = await api
+        .get("/transactions/" + transactionId, {
+          headers: { "api-key": userSelector?.username },
+        })
+        .catch((err) => console.log(err));
+      setAnyTransaction(data);
+    }
   };
   const fetchProducts = async () => {
     try {
@@ -76,18 +81,42 @@ export const CashierLandingPage = ({ search }) => {
 
   const handleReset = () => {
     const temp = { ...anyTransaction };
-    temp?.Transaction_details?.forEach((val) => (val.qty = 0));
+    temp?.Transaction_details?.forEach((val) => {
+      val.qty = 0;
+    });
     setAnyTransaction(temp);
   };
   const handleSave = async () => {
     try {
-      await api.post(
+      setButton(!button);
+      const { data } = await api.post(
         `/transaction_details/insert_multi_value`,
         anyTransaction?.Transaction_details,
-        { headers: { "api-key": userSelector?.username } }
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("cs-token"),
+            "api-key": userSelector?.username,
+          },
+        }
       );
+      toast({
+        title: "Successfully update this transaction",
+        position: "top",
+        duration: 2500,
+        isClosable: true,
+        status: "success",
+      });
+      setButton(!button);
     } catch (err) {
-      console.log(err);
+      toast({
+        title: "Error",
+        position: "top",
+        description: err?.response?.data,
+        duration: 2500,
+        isClosable: true,
+        status: "error",
+      });
+      setButton(!button);
     }
   };
 
@@ -175,7 +204,21 @@ export const CashierLandingPage = ({ search }) => {
                       <Button variant="info" onClick={handleReset}>
                         Reset
                       </Button>
-                      <Button variant="info" onClick={handleSave}>
+                      <Button
+                        variant="info"
+                        onClick={
+                          button
+                            ? handleSave
+                            : () =>
+                                toast({
+                                  title: "Your request is one process",
+                                  position: "top",
+                                  status: "warning",
+                                  isClosable: true,
+                                  duration: 2000,
+                                })
+                        }
+                      >
                         Save
                       </Button>
                       <Button variant="info">Pay</Button>
