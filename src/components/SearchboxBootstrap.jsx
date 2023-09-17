@@ -2,7 +2,7 @@ import { Form } from "react-bootstrap";
 
 export const SearchboxBootstrap = () => {
   return (
-    <Form>
+    <Form style={{ padding: 0 }}>
       <Form.Control
         id="searchFormCashierPage"
         type="text"

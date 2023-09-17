@@ -16,22 +16,26 @@ export const Header = () => {
   };
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
-      <Container>
-        <Navbar.Brand href="#home">Coffee Space</Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
-            <Nav.Link
-              href={
-                userSelector?.id === 1
-                  ? "/admin/landing_page"
-                  : userSelector?.id === 2
-                  ? "/cashier/landing_page"
-                  : null
-              }
-            >
-              Home
-            </Nav.Link>
+      {/* <Container> */}
+      <Navbar.Brand href="/TheCoffeeSpace" className="px-2">
+        Coffee Space
+      </Navbar.Brand>
+      <Navbar.Toggle aria-controls="basic-navbar-nav" />
+      <Navbar.Collapse id="basic-navbar-nav">
+        <Nav className="me-auto">
+          <Nav.Link
+            href={
+              userSelector?.id === 1
+                ? "/dashboard"
+                : userSelector?.id === 2
+                ? "/TheCoffeeSpace"
+                : null
+            }
+          >
+            Home
+          </Nav.Link>
+          <Nav.Link href="/transactions">Transactions</Nav.Link>
+          {userSelector.id === 1 ? (
             <NavDropdown title="Actions" id="basic-nav-dropdown">
               <NavDropdown.Item
                 href="/account_management"
@@ -39,10 +43,13 @@ export const Header = () => {
               >
                 Cashier Account Management
               </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2" className="d-xxs-smallfont">
+              <NavDropdown.Item
+                href="/daily_report"
+                className="d-xxs-smallfont"
+              >
                 Daily Report
               </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3" className="d-xxs-smallfont">
+              <NavDropdown.Item href="/dashboard" className="d-xxs-smallfont">
                 Dashboard
               </NavDropdown.Item>
               <NavDropdown.Divider />
@@ -50,12 +57,13 @@ export const Header = () => {
                 Separated link
               </NavDropdown.Item>
             </NavDropdown>
-          </Nav>
-          <div onClick={logout} type="button">
-            <SVGLogOut />
-          </div>
-        </Navbar.Collapse>
-      </Container>
+          ) : null}
+        </Nav>
+        <div onClick={logout} type="button">
+          <SVGLogOut />
+        </div>
+      </Navbar.Collapse>
+      {/* </Container> */}
     </Navbar>
   );
 };
