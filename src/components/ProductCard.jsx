@@ -1,5 +1,4 @@
 import { Col } from "react-bootstrap";
-import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import { SVGminus, SVGplus } from "./SVG/SVGplus";
 import { useEffect, useRef, useState } from "react";
@@ -7,6 +6,8 @@ import "../pages/Adminpages/style.css";
 import { useToast } from "@chakra-ui/react";
 
 export const ProductCardCashier = ({
+  products,
+  setProducts,
   item,
   index,
   showTransaction,
@@ -16,13 +17,12 @@ export const ProductCardCashier = ({
   const [showItemController, setShowItemController] = useState(false);
   const currentItemTransaction =
     currentTransaction?.Transaction_details?.findLast(
-      (val) => val.productId == item.id
+      (val) => val.productId === item.id
     );
   const toast = useToast();
-
   let last_qty = currentItemTransaction?.qty ? currentItemTransaction?.qty : 0;
   const [quantity, setQuantity] = useState(last_qty);
-  const ref = useRef(quantity);
+  const ref = useRef();
 
   useEffect(() => {
     setQuantity(last_qty); // isi nilai quantity
@@ -33,34 +33,33 @@ export const ProductCardCashier = ({
   }, [quantity]);
 
   useEffect(() => {
-    const modifyTransaction = setTimeout(() => {
-      if (!last_qty && quantity > 0) {
-        currentTransaction?.Transaction_details?.push({
-          transactionId: currentTransaction?.id,
-          price: item.price,
-          productId: item.id,
-          qty: quantity,
-          discount: 0,
-          status: 1,
-          Product: { productName: item?.productName },
-        });
-      } else if (last_qty || currentItemTransaction?.productId) {
-        const index = currentTransaction?.Transaction_details.findLastIndex(
-          (val) => val.productId === item.id
-        );
-        currentTransaction?.Transaction_details.splice(index, 1, {
-          ...currentItemTransaction,
-          ["qty"]: quantity,
-        });
-      }
-      setAnyTransaction(currentTransaction);
-    }, 1000);
-    return () => {
-      clearTimeout(modifyTransaction);
-    };
+    if (!last_qty && quantity > 0) {
+      currentTransaction?.Transaction_details?.push({
+        transactionId: currentTransaction?.id,
+        price: item.price,
+        productId: item.id,
+        qty: quantity,
+        discount: 0,
+        status: 1,
+        Product: { productName: item?.productName },
+      });
+    } else if (last_qty || currentItemTransaction?.productId) {
+      const index = currentTransaction?.Transaction_details.findLastIndex(
+        (val) => val.productId === item.id
+      );
+      currentTransaction?.Transaction_details.splice(index, 1, {
+        ...currentItemTransaction,
+        ["qty"]: quantity,
+      });
+    }
+    console.log(`here`);
+    setAnyTransaction(currentTransaction);
+    const temp = [...products];
+    temp[index].stock += last_qty - quantity;
+    setProducts(temp);
   }, [quantity]);
   return (
-    <Col key={`cardProd-${index}`} lg={3}>
+    <Col key={`cardProd-${index}`} lg={3} xs={6}>
       <Card
         className="position-relative"
         type="button"
@@ -84,7 +83,7 @@ export const ProductCardCashier = ({
           src={`http://localhost:2500/public/product/` + item.imageName}
           style={{
             aspectRatio: "1/1",
-            maxHeight: "240px",
+            width: "100%",
             objectFit: "cover",
             ...(showItemController && showTransaction
               ? { opacity: "0.5" }
@@ -93,14 +92,20 @@ export const ProductCardCashier = ({
         />
         {showItemController && showTransaction ? (
           <div
-            className="position-absolute d-flex justify-content-center w-100 gap-3"
-            style={{ top: "100px", zIndex: "2" }}
+            className="position-absolute d-flex justify-content-center w-100"
+            style={{
+              top: "calc(20px + 5vw)",
+              zIndex: "2",
+              gap: "calc(2px + 1vw)",
+            }}
           >
             <div
               type="button"
               onClick={() => {
+                if (ref.current < 0) return (ref.current = 0);
+                if (ref.current === 0) return;
                 ref.current -= 1;
-                if (ref.current < 0) ref.current = 0;
+                item.stock += 1;
                 setQuantity(ref.current);
               }}
             >
@@ -119,13 +124,25 @@ export const ProductCardCashier = ({
                   fontSize: "calc(10px + 1vw)",
                   textAlign: "center",
                 }}
-                onChange={(e) => setQuantity(Number(e.target.value))}
+                onChange={(e) => {
+                  if (e.target.value > item.stock + last_qty)
+                    e.target.value = item.stock + last_qty;
+                  setQuantity(Number(e.target.value));
+                }}
               />
               {/* <b style={{ fontSize: "calc(10px + 1vw)" }}>{quantity}</b> */}
             </span>
             <div
               onClick={() => {
+                if (item.stock === 0)
+                  return toast({
+                    status: "warning",
+                    title: "Quantity reachs maximum stock",
+                    isClosable: true,
+                    duration: 2000,
+                  });
                 ref.current += 1;
+                item.stock -= 1;
                 setQuantity(ref.current);
               }}
             >
@@ -134,7 +151,12 @@ export const ProductCardCashier = ({
           </div>
         ) : null}
         <Card.Body>
-          <Card.Title>{item.productName}</Card.Title>
+          <Card.Title
+            className="d-xxs-smallfont text-center"
+            style={{ textTransform: "capitalize" }}
+          >
+            {item.productName.toLowerCase()}
+          </Card.Title>
           {/* <Card.Text>
             Some quick example text to build on the card title and make up the
             bulk of the card's content.
