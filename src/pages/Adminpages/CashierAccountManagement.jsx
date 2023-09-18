@@ -48,7 +48,10 @@ export const CashierAccountManagement = () => {
   const fetchCashierAccount = async () => {
     try {
       const { data } = await api.get(`/users/cashier_account?role=2`, {
-        headers: { "api-key": userSelector.username },
+        headers: {
+          "api-key": userSelector.username,
+          Authorization: `Bearer ${localStorage.getItem("cs-token")}`,
+        },
       });
       setCashier_account(data);
     } catch (err) {
@@ -172,6 +175,7 @@ export const TableDataCashierAccount = ({
       .post("/users/update_isactive/" + account.id, data, {
         headers: {
           "api-key": userSelector.username,
+          Authorization: `Bearer ${localStorage.getItem("cs-token")}`,
         },
       })
       .then(async (result) => {

@@ -1,7 +1,6 @@
-import { Box, Center, Grid, GridItem, useDisclosure } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { PostCard } from "./post/post-card";
-import { ModalInputProduct } from "./post/post-modal";
+import { Box, Center, useDisclosure } from '@chakra-ui/react';
+import { ModalInputProduct } from './post/post-modal';
+
 
 export const ProductCard = ({ product, fetchProducts }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -42,8 +41,4 @@ export const ProductCard = ({ product, fetchProducts }) => {
       />
     </>
   );
-};
-
-export const ProductList = (props) => {
-  return <PostCard {...props}></PostCard>;
 };

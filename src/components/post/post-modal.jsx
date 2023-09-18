@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react';
 import {
   Modal,
   Center,
@@ -13,86 +14,125 @@ import {
   FormLabel,
   FormErrorMessage,
   useToast,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
+import defaultImage from '../../assets/default-image.jpg';
+import { api } from '../../API/api';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { useSelector } from 'react-redux';
 
-import defaultImage from "../../assets/default-image.jpg";
-import { useEffect, useState } from "react";
-import { api } from "../../API/api";
-import { useFormik } from "formik";
-import * as Yup from "yup";
 
-export const ModalInputProduct = ({ isOpen, onClose, fetchProducts, id }) => {
+export const ModalInputProduct = ({
+  product = { productName: '', price: 0, stock: 0, desc: '' },
+  isOpen,
+  fetchProducts,
+  onClose,
+  edit,
+}) => {
+  const userSelector = useSelector((state) => state.auth);
   const [selectedImage, setSelectedImage] = useState(null);
 
   const validationSchema = Yup.object().shape({
-    productName: Yup.string().min(3).required("Product Name is required"),
+    productName: Yup.string()
+      .min(3)
+      .test('unique-product', 'Product already exists', async function (value) {
+        if (!edit) {
+          const response = await api.get('/products');
+          const existingProducts = response.data.data;
+          const isDuplicate = existingProducts.some(
+            (product) => product.productName === value
+          );
+          return !isDuplicate;
+        }
+        return true;
+      })
+      .required('Product name is required'),
     price: Yup.number()
-      .typeError("Price must be a number")
-      .required("Price is required"),
+      .min(4)
+      .typeError('Price must be a number')
+      .required('Price is required'),
     stock: Yup.number()
-      .typeError("Stock must be a number")
-      .required("Stock is required"),
-    desc: Yup.string().required("Description is required"),
+      .min(2)
+      .typeError('Stock must be a number')
+      .required('Stock is required'),
+    desc: Yup.string().required('Description is required'),
   });
 
   const toast = useToast();
   const formik = useFormik({
     initialValues: {
-      productName: "",
-      price: 0,
-      stock: 0,
-      desc: "",
+      ...product,
+
     },
     validationSchema,
     onSubmit: async (values) => {
-      // Handle form submission
       try {
+        const token = localStorage.getItem('cs-token');
         const formData = new FormData();
-        formData.append("productImage", selectedImage); // Menambahkan gambar ke FormData
-        formData.append("productName", values.productName);
-        formData.append("price", values.price);
-        formData.append("stock", values.stock);
-        formData.append("desc", values.desc);
-        const response = await api.post("/products", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
 
-        toast({
-          title: "nice!",
-          description: "product successfully created!",
-          status: "success",
-          duration: 5000,
-          isClosable: true,
-          position: "top",
-        });
+        if (selectedImage) {
+          formData.append('productImage', selectedImage);
+        }
+        formData.append('productName', values.productName);
+        formData.append('price', values.price);
+        formData.append('stock', values.stock);
+        formData.append('desc', values.desc);
 
+        if (edit) {
+          const response = await api.patch(
+            `/products/${product.id}`,
+            formData,
+            {
+              params: {
+                token,
+                user_id: userSelector.id,
+              },
+            }
+          );
+
+          toast({
+            title: 'Success',
+            description: 'Product successfully updated!',
+            status: 'success',
+            duration: 5000,
+            isClosable: true,
+            position: 'top',
+          });
+        } else {
+          const response = await api.post('/products', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
+          toast({
+            title: 'Success',
+            description: 'Product successfully created!',
+            status: 'success',
+            duration: 2000,
+            isClosable: true,
+            position: 'top',
+          });
+        }
+        setSelectedImage(null);
         onClose();
-        formik.resetForm();
         fetchProducts();
       } catch (err) {
         console.log(err);
       }
     },
   });
-
-  const remove = async () => {
-    try {
-      await api.delete(`/products/${id}`);
-      formik.resetForm();
-      fetchProducts();
-      onClose();
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  useEffect(() => {
+    formik.resetForm();
+  }, [isOpen]);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader className="font-sans">Add New Product</ModalHeader>
+        <ModalHeader className='font-sans'>
+          {edit ? 'EDIT PRODUCT' : 'ADD NEW PRODUCT'}
+        </ModalHeader>
+
         <ModalCloseButton />
         <form onSubmit={formik.handleSubmit}>
           <ModalBody>
@@ -102,12 +142,16 @@ export const ModalInputProduct = ({ isOpen, onClose, fetchProducts, id }) => {
                 src={
                   selectedImage
                     ? URL.createObjectURL(selectedImage)
+                    : formik?.values.imageName
+                    ? 'http://localhost:2500/public/product/' +
+                      formik?.values.imageName
                     : defaultImage
                 }
                 width={'201px'}
                 height={'143px'}
-                alt='isi dengan gambar'
-              ></img> */}
+
+                alt=''
+
               <Input
                 id="image"
                 type="file"
@@ -126,10 +170,14 @@ export const ModalInputProduct = ({ isOpen, onClose, fetchProducts, id }) => {
                 maxW="300px"
               >
                 <FormLabel>Product Name</FormLabel>
-                <Input
-                  type="text"
-                  {...formik.getFieldProps("productName")}
-                  placeholder="Product Name"
+
+                  type='text'
+                  {...formik.getFieldProps('productName')}
+                  onChange={(e) =>
+                    formik.setFieldValue('productName', e.target.value)
+                  }
+                  placeholder='Product Name'
+
                 />
                 <FormErrorMessage>{formik.errors.productName}</FormErrorMessage>
               </FormControl>
@@ -140,9 +188,14 @@ export const ModalInputProduct = ({ isOpen, onClose, fetchProducts, id }) => {
               >
                 <FormLabel>Price</FormLabel>
                 <Input
-                  type="number"
-                  {...formik.getFieldProps("price")}
-                  placeholder="Price"
+
+                  type='number'
+                  {...formik.getFieldProps('price')}
+                  onChange={(e) =>
+                    formik.setFieldValue('price', e.target.value)
+                  }
+                  placeholder='Price'
+
                 />
                 <FormErrorMessage>{formik.errors.price}</FormErrorMessage>
               </FormControl>
@@ -153,9 +206,14 @@ export const ModalInputProduct = ({ isOpen, onClose, fetchProducts, id }) => {
               >
                 <FormLabel>Stock</FormLabel>
                 <Input
-                  type="number"
-                  {...formik.getFieldProps("stock")}
-                  placeholder="Stock"
+
+                  type='number'
+                  {...formik.getFieldProps('stock')}
+                  onChange={(e) =>
+                    formik.setFieldValue('stock', e.target.value)
+                  }
+                  placeholder='Stock'
+
                 />
                 <FormErrorMessage>{formik.errors.stock}</FormErrorMessage>
               </FormControl>
@@ -166,9 +224,11 @@ export const ModalInputProduct = ({ isOpen, onClose, fetchProducts, id }) => {
               >
                 <FormLabel>Description</FormLabel>
                 <Input
-                  type="text"
-                  {...formik.getFieldProps("desc")}
-                  placeholder="Description"
+                  type='text'
+                  {...formik.getFieldProps('desc')}
+                  onChange={(e) => formik.setFieldValue('desc', e.target.value)}
+                  placeholder='Description'
+
                 />
                 <FormErrorMessage>{formik.errors.desc}</FormErrorMessage>
               </FormControl>
@@ -183,11 +243,6 @@ export const ModalInputProduct = ({ isOpen, onClose, fetchProducts, id }) => {
             <Button type="submit" colorScheme="green" mr={3}>
               Submit
             </Button>
-            {id ? (
-              <Button type="button" colorScheme="red" mr={3} onClick={remove}>
-                Delete
-              </Button>
-            ) : null}
           </ModalFooter>
         </form>
       </ModalContent>
