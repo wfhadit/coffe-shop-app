@@ -21,6 +21,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useSelector } from 'react-redux';
 
+
 export const ModalInputProduct = ({
   product = { productName: '', category: '', price: 0, stock: 0, desc: '' },
   isOpen,
@@ -62,6 +63,7 @@ export const ModalInputProduct = ({
   const formik = useFormik({
     initialValues: {
       ...product,
+
     },
     validationSchema,
     onSubmit: async (values) => {
@@ -132,12 +134,19 @@ export const ModalInputProduct = ({
         <ModalHeader className='font-sans'>
           {edit ? 'EDIT PRODUCT' : 'ADD NEW PRODUCT'}
         </ModalHeader>
+
         <ModalCloseButton />
         <form onSubmit={formik.handleSubmit}>
           <ModalBody>
+
             <Center flexDir='column' gap={'15px'}>
               <img
                 className=''
+
+            <Center flexDir="column" gap={"15px"}>
+              {/* <img
+                className='cursor-pointer'
+
                 src={
                   selectedImage
                     ? URL.createObjectURL(selectedImage)
@@ -148,72 +157,78 @@ export const ModalInputProduct = ({
                 }
                 width={'201px'}
                 height={'143px'}
+
                 alt=''
-              ></img>
+
               <Input
-                id='image'
-                type='file'
-                accept='image/*'
+                id="image"
+                type="file"
+                accept="image/*"
                 onChange={(e) => setSelectedImage(e.target.files[0])}
-                style={{ display: 'none' }}
+                style={{ display: "none" }}
               />
-              <label htmlFor='image' className='cursor-pointer'>
+              <label htmlFor="image" className="cursor-pointer">
                 Choose Image
               </label>
               <FormControl
-                id='productName'
+                id="productName"
                 isInvalid={
                   formik.touched.productName && formik.errors.productName
                 }
-                maxW='300px'
+                maxW="300px"
               >
                 <FormLabel>Product Name</FormLabel>
-                <Input
+
                   type='text'
                   {...formik.getFieldProps('productName')}
                   onChange={(e) =>
                     formik.setFieldValue('productName', e.target.value)
                   }
                   placeholder='Product Name'
+
                 />
                 <FormErrorMessage>{formik.errors.productName}</FormErrorMessage>
               </FormControl>
               <FormControl
-                id='price'
+                id="price"
                 isInvalid={formik.touched.price && formik.errors.price}
-                maxW='300px'
+                maxW="300px"
               >
                 <FormLabel>Price</FormLabel>
                 <Input
+
                   type='number'
                   {...formik.getFieldProps('price')}
                   onChange={(e) =>
                     formik.setFieldValue('price', e.target.value)
                   }
                   placeholder='Price'
+
                 />
                 <FormErrorMessage>{formik.errors.price}</FormErrorMessage>
               </FormControl>
               <FormControl
-                id='stock'
+                id="stock"
                 isInvalid={formik.touched.stock && formik.errors.stock}
-                maxW='300px'
+                maxW="300px"
               >
                 <FormLabel>Stock</FormLabel>
                 <Input
+
                   type='number'
                   {...formik.getFieldProps('stock')}
                   onChange={(e) =>
                     formik.setFieldValue('stock', e.target.value)
                   }
                   placeholder='Stock'
+
                 />
                 <FormErrorMessage>{formik.errors.stock}</FormErrorMessage>
               </FormControl>
               <FormControl
-                id='desc'
+                id="desc"
                 isInvalid={formik.touched.desc && formik.errors.desc}
-                maxW='300px'
+                maxW="300px"
               >
                 <FormLabel>Description</FormLabel>
                 <Input
@@ -221,13 +236,19 @@ export const ModalInputProduct = ({
                   {...formik.getFieldProps('desc')}
                   onChange={(e) => formik.setFieldValue('desc', e.target.value)}
                   placeholder='Description'
+
                 />
                 <FormErrorMessage>{formik.errors.desc}</FormErrorMessage>
               </FormControl>
+              <select name="" id="">
+                <option value="1">Coffee</option>
+                <option value="2">Non-Coffee</option>
+                <option value="3">Pizza</option>
+              </select>
             </Center>
           </ModalBody>
           <ModalFooter>
-            <Button type='submit' colorScheme='green' mr={3}>
+            <Button type="submit" colorScheme="green" mr={3}>
               Submit
             </Button>
           </ModalFooter>
