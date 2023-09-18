@@ -20,6 +20,8 @@ import { SVGup } from "../../components/SVG/SVGup";
 import { SVGdown } from "../../components/SVG/SVGdown";
 import { SVGx } from "../../components/SVG/SVGx";
 import { ModalConfirmationPayResetDeleteTransaction } from "../../components/ModalConfirmationPayResetDeleteTransaction";
+import { async } from "q";
+import { ModalEditTransaction } from "../../components/ModalEditTransaction";
 
 export const CashierLandingPage = ({ search }) => {
   const toast = useToast();
@@ -27,6 +29,7 @@ export const CashierLandingPage = ({ search }) => {
   const [products, setProducts] = useState([]);
   const [showTransaction, setShowTransaction] = useState(0); // untuk show transaction
   const [showModal, setShowModal] = useState("");
+  const [modalEditTransaction, setModalEditTransaction] = useState(false);
   const [newTransaction, setNewTransaction] = useState(false);
   const [outstandingTransaction, setOutstandingTransaction] = useState([]);
   const [anyTransaction, setAnyTransaction] = useState({});
@@ -99,6 +102,7 @@ export const CashierLandingPage = ({ search }) => {
         },
       });
       fetchOutstandingTransaction();
+      fetchProducts();
     } catch (err) {
       console.log(err);
       if (typeof err?.response?.data === "string")
@@ -123,22 +127,25 @@ export const CashierLandingPage = ({ search }) => {
 
   useEffect(() => {
     fetchAnyTransaction(showTransaction);
+    fetchProducts();
   }, [showTransaction]);
 
   useEffect(() => {
     fetchOutstandingTransaction();
+    fetchProducts();
   }, [userSelector]);
 
   useEffect(() => {
     fetchProducts();
   }, []);
 
-  const handleReset = () => {
+  const handleReset = async () => {
     const temp = { ...anyTransaction };
     temp?.Transaction_details?.forEach((val) => {
       val.qty = 0;
     });
     setAnyTransaction(temp);
+    handleSave();
   };
   const handleSave = async () => {
     try {
@@ -154,6 +161,7 @@ export const CashierLandingPage = ({ search }) => {
         }
       );
       await fetchAnyTransaction(showTransaction);
+      fetchProducts();
       toast({
         title: "Successfully update this transaction",
         position: "top",
@@ -185,7 +193,6 @@ export const CashierLandingPage = ({ search }) => {
         if (result === 0)
           throw new Error("Error in updating transaction details to database");
       });
-      console.log(anyTransaction);
       anyTransaction.isPaid = true;
       anyTransaction.total =
         (11 / 100) *
@@ -219,6 +226,26 @@ export const CashierLandingPage = ({ search }) => {
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const handleChangeTransaction = async (order_type, name) => {
+    const data = {
+      ...anyTransaction,
+      ...(name && { name }),
+      ...(order_type && { order_type: Number(order_type) }),
+    };
+    delete data.updatedAt;
+    delete data.createdAt;
+    await api
+      .patch(`/transactions/` + anyTransaction?.id, data, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("cs-token"),
+          "api-key": userSelector?.username,
+        },
+      })
+      .catch((err) => console.log(err));
+    fetchAnyTransaction(anyTransaction?.id);
+    fetchOutstandingTransaction();
   };
 
   return (
@@ -269,24 +296,39 @@ export const CashierLandingPage = ({ search }) => {
                 className={
                   "" + anyTransaction?.Transaction_order_type?.order_type ===
                   "Dine In"
-                    ? "d-flex flex-wrap bg-info"
+                    ? "d-flex flex-wrap bg-info justify-content-between"
                     : anyTransaction?.Transaction_order_type?.order_type ===
                       "Take Away"
-                    ? "d-flex flex-wrap bg-success"
+                    ? "d-flex flex-wrap bg-success justify-content-between"
                     : anyTransaction?.Transaction_order_type?.order_type ===
                       "Catering"
-                    ? "d-flex flex-wrap bg-warning"
-                    : "d-flex flex-wrap"
+                    ? "d-flex flex-wrap bg-warning justify-content-between"
+                    : "d-flex flex-wrap justify-content-between"
                 }
               >
+                <ModalEditTransaction
+                  show={modalEditTransaction}
+                  setShow={setModalEditTransaction}
+                  currentTransaction={{ ...anyTransaction }}
+                  setAnyTransaction={setAnyTransaction}
+                  handleChangeTransaction={handleChangeTransaction}
+                />
                 <span className="border border-secondary rounded px-1">
                   Order No. {anyTransaction?.id}
                 </span>
-                <span className="border border-secondary rounded px-1">
+                <span
+                  className="border border-secondary rounded px-1"
+                  onClick={() => setModalEditTransaction(true)}
+                  type="button"
+                >
                   {anyTransaction?.Transaction_order_type?.order_type}
                 </span>
-                <span className="border border-secondary rounded px-1">
-                  Table/Name{anyTransaction?.name}
+                <span
+                  className="border border-secondary rounded px-1"
+                  onClick={() => setModalEditTransaction(true)}
+                  type="button"
+                >
+                  {anyTransaction?.name ? anyTransaction?.name : "Table/Name"}
                 </span>
               </Card.Header>
               <ListGroup variant="flush">
@@ -305,6 +347,8 @@ export const CashierLandingPage = ({ search }) => {
                         (val, index) => (
                           <TableTransaction
                             product={val}
+                            setProducts={setProducts}
+                            products={products}
                             index={index}
                             currentTransaction={{ ...anyTransaction }}
                             setAnyTransaction={setAnyTransaction}
@@ -451,7 +495,7 @@ export const CashierLandingPage = ({ search }) => {
                         handleDeleteTransaction={handleDeleteTransaction}
                       />
                       <div
-                        className={`d-flex px-2 text-center rounded-pill gap-1 w-100 ${
+                        className={`d-flex px-2 justify-content-center rounded-pill gap-1 w-100 ${
                           val.order_type === 1
                             ? "bg-info"
                             : val.order_type === 2
@@ -496,31 +540,57 @@ const TableTransaction = ({
   index,
   currentTransaction,
   setAnyTransaction,
+  products,
+  setProducts,
 }) => {
+  const toast = useToast();
   const [showModal, setShowModal] = useState("");
   const [quantity, setQuantity] = useState(
     currentTransaction.Transaction_details[index].qty
   );
-  const stock = useRef(product?.Product?.stock);
-  const ref = useRef();
+  const indexProduct = products.findIndex(
+    (val) => val.id === product?.Product?.id
+  );
+  console.log(`index`, indexProduct);
+  const [stock, setStock] = useState(0);
+  useEffect(() => {
+    setStock(products[indexProduct]?.stock);
+  }, [products[indexProduct]?.stock]);
+  console.log(stock, `here`);
 
+  const ref = useRef();
   const handleDeleteTransactionDetail = () => {
     currentTransaction.Transaction_details[index].qty = 0;
     setAnyTransaction(currentTransaction);
   };
 
   const handleAddQuantity = () => {
-    if (stock.current === 0) return;
+    if (stock === 0)
+      return toast({
+        title: "Quantity reachs maximum stock",
+        duration: 2000,
+        isClosable: true,
+        position: "top",
+        status: "warning",
+      });
     ref.current = quantity;
     ref.current += 1;
-    stock.current -= 1;
+    const newStock = stock - 1;
+    setStock(newStock);
+    const temp = [...products];
+    temp[indexProduct].stock = newStock;
+    setProducts(temp);
     setQuantity(ref.current);
   };
   const handleSubtractQuantity = () => {
     if (quantity === 0) return;
     ref.current = quantity;
     ref.current -= 1;
-    stock.current += 1;
+    const newStock = stock + 1;
+    setStock(newStock);
+    const temp = [...products];
+    temp[indexProduct].stock = newStock;
+    setProducts(temp);
     setQuantity(ref.current);
   };
 
