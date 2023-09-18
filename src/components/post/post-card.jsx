@@ -1,22 +1,18 @@
-import debounce from 'lodash.debounce';
-import { useCallback, useEffect, useState } from 'react';
 import { api } from '../../API/api';
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import { useSelector } from 'react-redux';
-import { useToast } from '@chakra-ui/react';
+import { useDisclosure, useToast } from '@chakra-ui/react';
+import { ModalInputProduct } from './post-modal';
 
-export const PostCard = ({ products, fetchProducts }) => {
+export const PostCard = ({ product, fetchProducts }) => {
   const userSelector = useSelector((state) => state.auth);
-  const [product, setProduct] = useState([]);
-  const [search, setSearch] = useState('');
-  const [sortBy, setSortBy] = useState(null);
-
+  const disclosure = useDisclosure();
   const toast = useToast();
 
   const deleteProduct = (productId) => {
     const token = localStorage.getItem('cs-token');
 
-    const isConfirmed = window.confirm('Are u sure want to delete this?');
+    const isConfirmed = window.confirm('Are you sure you want to delete this?');
     if (!isConfirmed) {
       return;
     }
@@ -25,20 +21,19 @@ export const PostCard = ({ products, fetchProducts }) => {
       .delete(`/products/${productId}`, {
         params: { token, product_id: userSelector.id },
       })
-      .then((result) => {
+      .then(() => {
         toast({
           title: 'Product has been deleted',
           status: 'success',
           isClosable: true,
           position: 'top',
-          duration: 1500,
+          duration: 3000,
         });
         fetchProducts();
       })
       .catch((err) => {
         toast({
-          title: 'Delete post failed',
-          description: err?.response?.data,
+          title: 'Delete product failed',
           status: 'error',
           position: 'top',
           isClosable: true,
@@ -46,118 +41,50 @@ export const PostCard = ({ products, fetchProducts }) => {
         });
       });
   };
-  useEffect(() => {
-    console.log(userSelector.id);
-  }, []);
-
-  const fetchSearch = (query) => {
-    return api
-      .get('/products/search', {
-        params: {
-          productName: query,
-        },
-      })
-      .then((res) => res.data.data)
-      .catch((err) => console.log(err));
-  };
-
-  useEffect(() => {
-    if (search) {
-      fetchSearch(search).then((data) => {
-        setProduct(data || []);
-      });
-    } else {
-      fetchProducts('').then((data) => {
-        setProduct(data || []);
-      });
-    }
-  }, [search]);
-
-  const debouncedSearch = useCallback(
-    debounce((query) => setSearch(query), 1000),
-    []
-  );
-
-  const doSearch = (query) => {
-    debouncedSearch(query);
-  };
-  //   const [sortedProducts, setSortedProducts] = useState([]);
-
-  //   const sortProducts = (products) => {
-  //     if (sortBy === 'name-asc') {
-  //       return [...products].sort((a, b) =>
-  //         a.productName.localeCompare(b.productName)
-  //       );
-  //     } else if (sortBy === 'name-desc') {
-  //       return [...products].sort((a, b) =>
-  //         b.productName.localeCompare(a.productName)
-  //       );
-  //     } else if (sortBy === 'price-asc') {
-  //       return [...products].sort((a, b) => a.price - b.price);
-  //     } else if (sortBy === 'price-desc') {
-  //       return [...products].sort((a, b) => b.price - a.price);
-  //     } else {
-  //       return products;
-  //     }
-  //   };
 
   return (
-    <div>
-      <input
-        type='text'
-        placeholder='Search for coffee...'
-        className='border rounded-lg p-2 w-full'
-        onChange={(e) => doSearch(e.target.value)}
-      />
-      <div>
-        <label className='mr-2'>Sort by:</label>
-        <select
-          value={sortBy || ''}
-          onChange={(e) => setSortBy(e.target.value)}
-        >
-          <option value=''>None</option>
-          <option value='name-asc'>Product Name (Ascending)</option>
-          <option value='name-desc'>Product Name (Descending)</option>
-          <option value='price-asc'>Price (Ascending)</option>
-          <option value='price-desc'>Price (Descending)</option>
-        </select>
-      </div>
-
-      <table className='table-auto w-full'>
-        <thead>
-          <tr>
-            <th className='px-4 py-2'>ID</th>
-            <th className='px-4 py-2'>Image</th>
-            <th className='px-4 py-2'>Product</th>
-            <th className='px-4 py-2'>Price</th>
-            <th className='px-4 py-2'>Stock</th>
-            <th className='px-4 py-2'>Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          {products.map((product) => (
-            <tr key={product.id}>
-              <td className='border px-4 py-2'>{product.id}</td>
-              <td className='border px-4 py-2'>{product.imageName}</td>
-              <td className='border px-4 py-2'>{product.productName}</td>
-              <td className='border px-4 py-2'>Rp. {product.price}</td>
-              <td className='border px-4 py-2'>{product.stock}</td>
-              <td className='border px-4 py-2'>{product.desc}</td>
-              <td className='border px-4 py-2'>
-                <EditIcon boxSize={5} cursor={'pointer'} />
-              </td>
-              <td className='border px-4 py-2'>
-                <DeleteIcon
-                  boxSize={5}
-                  cursor={'pointer'}
-                  onClick={() => deleteProduct(product.id)}
-                />
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      {products.length === 0 && <p className='mt-4'>Product not found</p>}
-    </div>
+    <>
+      <tr
+        key={product.id}
+        className='hover:bg-green-50 transform hover:scale-100 hover:shadow-md'
+      >
+        <ModalInputProduct
+          product={product}
+          isOpen={disclosure.isOpen}
+          onClose={disclosure.onClose}
+          edit={'edit'}
+          fetchProducts={fetchProducts}
+        />
+        <td className='border px-4 py-2'>{product.id}</td>
+        <td className='border px-4 py-2'>
+          <img
+            src={`http://localhost:2500/public/product/${product.imageName}`}
+            width='100'
+            height='100'
+            alt=''
+            objectFit='cover'
+          />
+        </td>
+        <td className='border px-4 py-2'>{product.productName}</td>
+        <td className='border px-4 py-2'>Rp. {product.price}</td>
+        <td className='border px-4 py-2'>{product.stock}</td>
+        <td className='border px-4 py-2'>{product.desc}</td>
+        <td className='border px-4 py-2'>
+          <EditIcon
+            boxSize={5}
+            cursor={'pointer'}
+            onClick={() => disclosure.onOpen()}
+          />
+        </td>
+        <td className='border px-4 py-2'>
+          <DeleteIcon
+            color={'red.500'}
+            boxSize={5}
+            cursor={'pointer'}
+            onClick={() => deleteProduct(product.id)}
+          />
+        </td>
+      </tr>
+    </>
   );
 };
