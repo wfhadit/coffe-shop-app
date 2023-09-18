@@ -1,5 +1,6 @@
 import { AdminLandingPage } from '../pages/Adminpages/AdminLandingPage';
 import { CashierAccountManagement } from '../pages/Adminpages/CashierAccountManagement';
+import { SalesReportPage } from '../pages/Adminpages/SalesReport';
 import { CashierLandingPage } from '../pages/CashierPages/CashierLandingPage';
 import { Login } from '../pages/Login';
 import { Redirect } from '../pages/Redirect';
@@ -55,6 +56,15 @@ export const routes = [
     (
       <ProtectedPage needLogin={true} AdminOnly={true}>
         <AdminLandingPage />
+      </ProtectedPage>
+    )
+  ),
+
+  new RouteClass(
+    '/report',
+    (
+      <ProtectedPage needLogin={true} AdminOnly={true}>
+        <SalesReportPage />
       </ProtectedPage>
     )
   ),
