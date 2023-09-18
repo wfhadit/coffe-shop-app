@@ -42,7 +42,17 @@ function Sidebar() {
                 : null
             }
           >
-            Dashboard
+            Products
+          </a>
+          <a
+            href="/categories"
+            className={
+              window.location.pathname === "/categories"
+                ? "bg-success-subtle "
+                : null
+            }
+          >
+            Categories
           </a>
         </Offcanvas.Body>
       </Offcanvas>
