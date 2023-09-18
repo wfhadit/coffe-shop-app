@@ -14,6 +14,7 @@ import {
   FormLabel,
   FormErrorMessage,
   useToast,
+  Select,
 } from '@chakra-ui/react';
 import defaultImage from '../../assets/default-image.jpg';
 import { api } from '../../API/api';
@@ -22,7 +23,7 @@ import * as Yup from 'yup';
 import { useSelector } from 'react-redux';
 
 export const ModalInputProduct = ({
-  product = { productName: '', category: '', price: 0, stock: 0, desc: '' },
+  product = { productName: '', categoryId: '', price: 0, stock: 0, desc: '' },
   isOpen,
   fetchProducts,
   onClose,
@@ -31,6 +32,12 @@ export const ModalInputProduct = ({
 }) => {
   const userSelector = useSelector((state) => state.auth);
   const [selectedImage, setSelectedImage] = useState(null);
+
+  const categoryOption = [
+    { value: 1, label: 'Coffee' },
+    { value: 2, label: 'Non-Coffee' },
+    { value: 3, label: 'Pizza' },
+  ];
 
   const validationSchema = Yup.object().shape({
     productName: Yup.string()
@@ -73,7 +80,7 @@ export const ModalInputProduct = ({
           formData.append('productImage', selectedImage);
         }
         formData.append('productName', values.productName);
-        formData.append('category', values.category);
+        formData.append('categoryId', values.categoryId);
         formData.append('price', values.price);
         formData.append('stock', values.stock);
         formData.append('desc', values.desc);
@@ -177,6 +184,27 @@ export const ModalInputProduct = ({
                   placeholder='Product Name'
                 />
                 <FormErrorMessage>{formik.errors.productName}</FormErrorMessage>
+              </FormControl>
+              <FormControl
+                maxW='300px'
+                isInvalid={
+                  formik.errors.categoryId && formik.touched.categoryId
+                }
+              >
+                <FormLabel>Category</FormLabel>
+                <Select
+                  name='categoryId'
+                  value={formik.values.categoryId}
+                  onChange={formik.handleChange('categoryId')}
+                  placeholder='Choose Category'
+                >
+                  {categoryOption.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </Select>
+                <FormErrorMessage>{formik.errors.categoryId}</FormErrorMessage>
               </FormControl>
               <FormControl
                 id='price'
