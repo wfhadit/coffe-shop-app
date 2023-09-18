@@ -1,3 +1,7 @@
+.td-cashier-page {
+  font-size: calc(8px + 0.5vw);
+}
+
 @media screen and (max-width: 340px) {
   .d-xxs-none {
     display: none;
@@ -10,5 +14,68 @@
   }
   .d-xxs-smallfont {
     font-size: 8px !important;
+  }
+  .d-xxs-supersmallfont {
+    font-size: 4px !important;
+  }
+
+  div.list-group-item,
+  .xs-no-p-m,
+  .d-xxs-smallfont.btn.btn-info {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  td,
+  th {
+    padding: 1px !important;
+  }
+}
+
+@media screen and (max-width: 429px) {
+  .d-xxs-smallfont.btn.btn-info {
+    padding: 0 !important;
+  }
+  .td-cashier-page {
+    padding: 0 2px !important;
+    word-break: break-all;
+  }
+
+  div.list-group-item {
+    padding: 0 0 0 0 !important;
+  }
+}
+
+@media screen and (max-width: 650px) {
+  .col,
+  .container,
+  .card {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  div.card-header,
+  .list-group-item,
+  .list-group.list-group-flush {
+    padding: 0 4px !important;
+    margin: 0 !important;
+  }
+  .d-xxs-smallfont {
+    font-size: calc(8px + 2vw) !important;
+  }
+  .col-lg-3.col-6 {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+}
+
+@media screen and (max-width: 820px) {
+  .card {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  .card-body {
+    padding: 0 1px;
+  }
+  .col.col-lg-3.col-4 {
+    margin-left: 4px !important;
   }
 }
