@@ -94,6 +94,7 @@ export const PostList = ({ isOpen, onOpen, onClose }) => {
             <th className='px-4 py-2 '>ID</th>
             <th className='px-4 py-2 '>Image</th>
             <th className='px-4 py-2 '>Product</th>
+            {/* <th className='px-4 py-2 '>Category</th> */}
             <th className='px-4 py-2 '>Price</th>
             <th className='px-4 py-2 '>Stock</th>
             <th className='px-4 py-2 '>Description</th>
@@ -112,6 +113,7 @@ export const PostList = ({ isOpen, onOpen, onClose }) => {
         isOpen={isOpen}
         fetchProducts={fetchSearch}
         onClose={onClose}
+        handleSortChange={handleSortChange}
       />
     </div>
   );

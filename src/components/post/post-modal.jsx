@@ -22,11 +22,12 @@ import * as Yup from 'yup';
 import { useSelector } from 'react-redux';
 
 export const ModalInputProduct = ({
-  product = { productName: '', price: 0, stock: 0, desc: '' },
+  product = { productName: '', category: '', price: 0, stock: 0, desc: '' },
   isOpen,
   fetchProducts,
   onClose,
   edit,
+  handleSortChange,
 }) => {
   const userSelector = useSelector((state) => state.auth);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -72,6 +73,7 @@ export const ModalInputProduct = ({
           formData.append('productImage', selectedImage);
         }
         formData.append('productName', values.productName);
+        formData.append('category', values.category);
         formData.append('price', values.price);
         formData.append('stock', values.stock);
         formData.append('desc', values.desc);
@@ -135,7 +137,7 @@ export const ModalInputProduct = ({
           <ModalBody>
             <Center flexDir='column' gap={'15px'}>
               <img
-                className='cursor-pointer'
+                className=''
                 src={
                   selectedImage
                     ? URL.createObjectURL(selectedImage)
