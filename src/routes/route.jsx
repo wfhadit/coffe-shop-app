@@ -7,6 +7,7 @@ import { Redirect } from '../pages/Redirect';
 import { ProtectedPage } from './ProtectedPage';
 
 
+
 class RouteClass {
   constructor(path = "", element) {
     this.path = path;
@@ -28,7 +29,9 @@ export const routes = [
   new RouteClass("/", <Redirect />),
   new RouteClass("/login", <Login />),
   new RouteClass(
+
     "/account_management",
+
     (
       <ProtectedPage needLogin={true} AdminOnly={true}>
         <CashierAccountManagement />
@@ -36,7 +39,9 @@ export const routes = [
     )
   ),
   new RouteClass(
+
     "/TheCoffeeSpace",
+
     (
       <ProtectedPage needLogin={true}>
         <CashierLandingPage />
@@ -44,7 +49,9 @@ export const routes = [
     )
   ),
   new RouteClass(
+
     "/dashboard",
+
     (
       <ProtectedPage needLogin={true} AdminOnly={true}>
         <AdminLandingPage />
@@ -57,6 +64,14 @@ export const routes = [
     (
       <ProtectedPage needLogin={true} AdminOnly={true}>
         <SalesReportPage />
+      </ProtectedPage>
+    )
+  ),
+  new RouteClass(
+    "/categories",
+    (
+      <ProtectedPage needLogin={true} AdminOnly={true}>
+        <CategoriesPage />
       </ProtectedPage>
     )
   ),
