@@ -62,7 +62,7 @@ export const ProductCardCashier = ({
   console.log(`here`, products[index]?.stock);
 
   return (
-    <Col key={`cardProd-${index}`} lg={3} xs={6} className="mt-3">
+    <Col key={`cardProd-${index}`} xl={3} lg={4} md={6} xs={6} className="mt-3">
       <Card
         className="position-relative"
         type="button"
@@ -97,9 +97,9 @@ export const ProductCardCashier = ({
           <div
             className="position-absolute d-flex justify-content-center w-100"
             style={{
-              top: "calc(20px + 5vw)",
+              top: "5vw",
               zIndex: "2",
-              gap: "calc(2px + 1vw)",
+              gap: "calc(1vw)",
             }}
           >
             <div
@@ -152,20 +152,24 @@ export const ProductCardCashier = ({
             </div>
           </div>
         ) : null}
-        <Card.Body>
-          <Card.Title
-            className="d-xxs-smallfont text-center"
-            style={{ textTransform: "capitalize" }}
-          >
-            {item.productName.toLowerCase()}
-          </Card.Title>
-          <Card.Text className="d-xxs-smallfont text-center">
-            Price: IDR{item?.price.toLocaleString(`id-ID`)}
-            <br />
-            Stock: {item?.stock.toLocaleString(`id-ID`)}
-          </Card.Text>
-        </Card.Body>
+        <Card.Title
+          className="card-cashier-page text-center position-absolute bottom-0 w-100 mb-0 bg-info-subtle"
+          style={{
+            textTransform: "capitalize",
+            maxHeight: "48px",
+          }}
+        >
+          {item.productName.toLowerCase()}
+        </Card.Title>
       </Card>
+      <Card.Body>
+        <Card.Text className="td-cashier-page text-center">
+          Price: IDR{item?.price.toLocaleString(`id-ID`)}
+        </Card.Text>
+        <Card.Text className="td-cashier-page text-center">
+          Stock: {item?.stock.toLocaleString(`id-ID`)}
+        </Card.Text>
+      </Card.Body>
     </Col>
   );
 };

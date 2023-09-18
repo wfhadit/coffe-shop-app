@@ -254,7 +254,7 @@ export const CashierLandingPage = ({ search }) => {
       <Row className="m-0">
         <Col className="xs-no-p-m">
           {/* <Container> */}
-          <Row className="m-0">
+          <Row className="mb-2">
             <SearchboxBootstrap />
           </Row>
           <Row className="m-0">
@@ -282,8 +282,7 @@ export const CashierLandingPage = ({ search }) => {
           <Col lg={4} xs={6} className="col">
             {/* <Container> */}
             <Button
-              className="mb-2 d-xxs-smallfont"
-              variant="info"
+              className="mb-2 d-xxs-smallfont bg-info-subtle border-info-subtle text-dark"
               onClick={() => {
                 setShowTransaction(0);
                 setAnyTransaction({});
@@ -296,13 +295,13 @@ export const CashierLandingPage = ({ search }) => {
                 className={
                   "" + anyTransaction?.Transaction_order_type?.order_type ===
                   "Dine In"
-                    ? "d-flex flex-wrap bg-info justify-content-between"
+                    ? "d-flex flex-wrap bg-danger-subtle justify-content-between"
                     : anyTransaction?.Transaction_order_type?.order_type ===
                       "Take Away"
-                    ? "d-flex flex-wrap bg-success justify-content-between"
+                    ? "d-flex flex-wrap bg-success-subtle justify-content-between"
                     : anyTransaction?.Transaction_order_type?.order_type ===
                       "Catering"
-                    ? "d-flex flex-wrap bg-warning justify-content-between"
+                    ? "d-flex flex-wrap bg-warning-subtle justify-content-between"
                     : "d-flex flex-wrap justify-content-between"
                 }
               >
@@ -409,12 +408,11 @@ export const CashierLandingPage = ({ search }) => {
                     <Button
                       variant="info"
                       onClick={() => setShowModal("RESET TRANSACTION")}
-                      className="d-xxs-smallfont"
+                      className="d-xxs-smallfont bg-info-subtle border-info-subtle text-dark"
                     >
                       Reset
                     </Button>
                     <Button
-                      variant="info"
                       onClick={
                         button
                           ? handleSave
@@ -427,13 +425,12 @@ export const CashierLandingPage = ({ search }) => {
                                 duration: 2000,
                               })
                       }
-                      className="d-xxs-smallfont"
+                      className="d-xxs-smallfont bg-info-subtle border-info-subtle text-dark"
                     >
                       Save
                     </Button>
                     <Button
-                      variant="info"
-                      className="d-xxs-smallfont"
+                      className="d-xxs-smallfont bg-info-subtle border-info-subtle text-dark"
                       onClick={() => setShowModal("PAY")}
                     >
                       Pay
@@ -447,25 +444,29 @@ export const CashierLandingPage = ({ search }) => {
         ) : (
           <Col xl={2} lg={3} xs={4} className="col">
             <Button
-              variant="info"
-              className="position-relative w-100"
+              className="position-relative w-100 bg-info-subtle border-info-subtle text-dark"
               onClick={() => setNewTransaction(!newTransaction)}
             >
               New Transaction
             </Button>
             {newTransaction ? (
               <div className="d-flex flex-column gap-2 my-2">
-                <Button variant="info" onClick={() => createNewTransaction(1)}>
+                <Button
+                  variant="text-dark bg-danger-subtle border-danger-subtle"
+                  onClick={() => createNewTransaction(1)}
+                >
                   Dine In
                 </Button>
                 <Button
-                  variant="success"
                   onClick={() => createNewTransaction(2)}
+                  variant="success"
+                  className="text-dark bg-success-subtle border-success-subtle"
                 >
                   Take Away
                 </Button>
                 <Button
                   variant="warning"
+                  className="bg-warning-subtle border-warning-subtle"
                   onClick={() => createNewTransaction(3)}
                 >
                   Cathering
@@ -495,13 +496,13 @@ export const CashierLandingPage = ({ search }) => {
                         handleDeleteTransaction={handleDeleteTransaction}
                       />
                       <div
-                        className={`d-flex px-2 justify-content-center rounded-pill gap-1 w-100 ${
+                        className={`d-flex py-1 px-2 justify-content-center rounded-pill gap-1 w-100 ${
                           val.order_type === 1
-                            ? "bg-info"
+                            ? "bg-danger-subtle"
                             : val.order_type === 2
-                            ? "bg-success"
+                            ? "bg-success-subtle"
                             : val.order_type === 3
-                            ? "bg-warning"
+                            ? "bg-warning-subtle"
                             : null
                         }`}
                         type="button"
