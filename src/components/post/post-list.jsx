@@ -9,8 +9,9 @@ import { Search2Icon } from '@chakra-ui/icons';
 
 export const PostList = ({ isOpen, onOpen, onClose }) => {
   const userSelector = useSelector((state) => state.auth);
-  const [sort, setSort] = useState({ orderBy: '', sortBy: '' });
+  const [sort, setSort] = useState({ orderBy: '', sortBy: '', categoryId: '' });
   const [search, setSearch] = useState('');
+  const [category, setCategory] = useState('');
   const [products, setProducts] = useState([]);
   const toast = useToast();
 
@@ -20,6 +21,7 @@ export const PostList = ({ isOpen, onOpen, onClose }) => {
         params: {
           productName: search,
           ...sort,
+          categoryId: category,
         },
       })
       .then((res) => {
@@ -31,7 +33,7 @@ export const PostList = ({ isOpen, onOpen, onClose }) => {
 
   useEffect(() => {
     fetchSearch();
-  }, [search, sort]);
+  }, [search, sort, category]);
 
   const debouncedSearch = useCallback(
     debounce((query) => setSearch(query), 500),
@@ -44,7 +46,12 @@ export const PostList = ({ isOpen, onOpen, onClose }) => {
 
   const handleSortChange = (e) => {
     const value = e.target.value.split('-');
-    setSort({ orderBy: value[0], sortBy: value[1] });
+    setSort({ orderBy: value[0], sortBy: value[1], categoryId: value[1] });
+  };
+
+  const handleCategoryChange = (e) => {
+    const selectedCategory = e.target.value;
+    setCategory(category);
   };
 
   return (
@@ -61,12 +68,12 @@ export const PostList = ({ isOpen, onOpen, onClose }) => {
         />
         <div className='px-2 py-2 border rounded-lg mr-2'>
           <select
-            className='border-none outline-none'
+            className='border-none outline-none cursor-pointer'
             defaultValue={''}
             onChange={handleSortChange}
           >
-            <option className='' value=''>
-              Filter
+            <option className='cursor-pointer' value=''>
+              None
             </option>
             <option value='productName-asc'>Product Name A-Z</option>
             <option value='productName-desc'>Product Name Z-A</option>
@@ -76,15 +83,17 @@ export const PostList = ({ isOpen, onOpen, onClose }) => {
         </div>
         <div className='px-2 py-2 border rounded-lg'>
           <select
-            className='border-none outline-none'
+            className='border-none outline-none cursor-pointer'
             defaultValue={''}
-            onChange={handleSortChange}
+            onChange={handleCategoryChange}
+            style={{ cursor: 'pointer' }}
           >
             <option className='' value=''>
               Category
             </option>
-            <option value='productName-asc'>Beverages</option>
-            <option value='productName-desc'>Foods</option>
+            <option value='Coffee'>Coffee</option>
+            <option value='Non-Coffee'>Non-Coffee</option>
+            <option value='Pizza'>Pizza</option>
           </select>
         </div>
       </div>
@@ -94,7 +103,7 @@ export const PostList = ({ isOpen, onOpen, onClose }) => {
             <th className='px-4 py-2 '>ID</th>
             <th className='px-4 py-2 '>Image</th>
             <th className='px-4 py-2 '>Product</th>
-            {/* <th className='px-4 py-2 '>Category</th> */}
+            <th className='px-4 py-2 '>Category</th>
             <th className='px-4 py-2 '>Price</th>
             <th className='px-4 py-2 '>Stock</th>
             <th className='px-4 py-2 '>Description</th>

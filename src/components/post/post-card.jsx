@@ -9,6 +9,19 @@ export const PostCard = ({ product, fetchProducts }) => {
   const disclosure = useDisclosure();
   const toast = useToast();
 
+  const categoryName = (categoryId) => {
+    switch (categoryId) {
+      case 1:
+        return 'Coffee';
+      case 2:
+        return 'Non-Coffee';
+      case 3:
+        return 'Pizza';
+      default:
+        return '';
+    }
+  };
+
   const deleteProduct = (productId) => {
     const token = localStorage.getItem('cs-token');
 
@@ -66,6 +79,7 @@ export const PostCard = ({ product, fetchProducts }) => {
           />
         </td>
         <td className='border px-4 py-2'>{product.productName}</td>
+        <td className='border px-4 py-2'>{categoryName(product.categoryId)}</td>
         <td className='border px-4 py-2'>Rp. {product.price}</td>
         <td className='border px-4 py-2'>{product.stock}</td>
         <td className='border px-4 py-2'>{product.desc}</td>
