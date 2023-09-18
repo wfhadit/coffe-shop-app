@@ -1,12 +1,11 @@
-import { AdminLandingPage } from '../pages/Adminpages/AdminLandingPage';
-import { CashierAccountManagement } from '../pages/Adminpages/CashierAccountManagement';
-import { SalesReportPage } from '../pages/Adminpages/SalesReport';
-import { CashierLandingPage } from '../pages/CashierPages/CashierLandingPage';
-import { Login } from '../pages/Login';
-import { Redirect } from '../pages/Redirect';
-import { ProtectedPage } from './ProtectedPage';
-
-
+import { AdminLandingPage } from "../pages/Adminpages/AdminLandingPage";
+import { CashierAccountManagement } from "../pages/Adminpages/CashierAccountManagement";
+import { SalesReportPage } from "../pages/Adminpages/SalesReport";
+import { CashierLandingPage } from "../pages/CashierPages/CashierLandingPage";
+import { Login } from "../pages/Login";
+import { Redirect } from "../pages/Redirect";
+import { ProtectedPage } from "./ProtectedPage";
+import { CategoriesPage } from "../pages/Adminpages/CategoriesPage";
 
 class RouteClass {
   constructor(path = "", element) {
@@ -29,7 +28,6 @@ export const routes = [
   new RouteClass("/", <Redirect />),
   new RouteClass("/login", <Login />),
   new RouteClass(
-
     "/account_management",
 
     (
@@ -39,7 +37,6 @@ export const routes = [
     )
   ),
   new RouteClass(
-
     "/TheCoffeeSpace",
 
     (
@@ -49,7 +46,6 @@ export const routes = [
     )
   ),
   new RouteClass(
-
     "/dashboard",
 
     (
@@ -60,7 +56,7 @@ export const routes = [
   ),
 
   new RouteClass(
-    '/report',
+    "/report",
     (
       <ProtectedPage needLogin={true} AdminOnly={true}>
         <SalesReportPage />

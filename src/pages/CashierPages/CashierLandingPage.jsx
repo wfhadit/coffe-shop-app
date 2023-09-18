@@ -175,24 +175,29 @@ export const CashierLandingPage = ({ search }) => {
         status: "error",
       });
       setButton(true);
+      return 0;
     }
   };
 
   const handlePay = async () => {
-    handleSave();
-    console.log(anyTransaction);
-    anyTransaction.isPaid = true;
-    anyTransaction.total =
-      (11 / 100) *
+    try {
+      await handleSave().then((result) => {
+        if (result === 0)
+          throw new Error("Error in updating transaction details to database");
+      });
+      console.log(anyTransaction);
+      anyTransaction.isPaid = true;
+      anyTransaction.total =
+        (11 / 100) *
+          anyTransaction?.Transaction_details?.reduce(
+            (acc, val) => acc + val.price * val.qty,
+            0
+          ) +
         anyTransaction?.Transaction_details?.reduce(
           (acc, val) => acc + val.price * val.qty,
           0
-        ) +
-      anyTransaction?.Transaction_details?.reduce(
-        (acc, val) => acc + val.price * val.qty,
-        0
-      );
-    try {
+        );
+
       await api
         .patch(`/transactions/` + anyTransaction.id, anyTransaction, {
           headers: {
@@ -430,7 +435,7 @@ export const CashierLandingPage = ({ search }) => {
               <ListGroup.Item key={`group-item`}>
                 {outstandingTransaction.length &&
                   outstandingTransaction.map((val, index) => (
-                    <div key={`transaction-${index}`} className="d-flex">
+                    <div key={`transaction-${index}`} className="d-flex mt-2">
                       <span
                         className="d-flex align-items-center justify-content-center"
                         type="button"
