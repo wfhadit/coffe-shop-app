@@ -13,59 +13,59 @@ import {
   FormLabel,
   FormErrorMessage,
   useToast,
-} from '@chakra-ui/react';
+} from "@chakra-ui/react";
 
-import defaultImage from '../../assets/default-image.jpg';
-import { useEffect, useState } from 'react';
-import { api } from '../../API/api';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
+import defaultImage from "../../assets/default-image.jpg";
+import { useEffect, useState } from "react";
+import { api } from "../../API/api";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 export const ModalInputProduct = ({ isOpen, onClose, fetchProducts, id }) => {
   const [selectedImage, setSelectedImage] = useState(null);
 
   const validationSchema = Yup.object().shape({
-    productName: Yup.string().min(3).required('Product Name is required'),
+    productName: Yup.string().min(3).required("Product Name is required"),
     price: Yup.number()
-      .typeError('Price must be a number')
-      .required('Price is required'),
+      .typeError("Price must be a number")
+      .required("Price is required"),
     stock: Yup.number()
-      .typeError('Stock must be a number')
-      .required('Stock is required'),
-    desc: Yup.string().required('Description is required'),
+      .typeError("Stock must be a number")
+      .required("Stock is required"),
+    desc: Yup.string().required("Description is required"),
   });
 
   const toast = useToast();
   const formik = useFormik({
     initialValues: {
-      productName: '',
+      productName: "",
       price: 0,
       stock: 0,
-      desc: '',
+      desc: "",
     },
     validationSchema,
     onSubmit: async (values) => {
       // Handle form submission
       try {
         const formData = new FormData();
-        formData.append('productImage', selectedImage); // Menambahkan gambar ke FormData
-        formData.append('productName', values.productName);
-        formData.append('price', values.price);
-        formData.append('stock', values.stock);
-        formData.append('desc', values.desc);
-        const response = await api.post('/products', formData, {
+        formData.append("productImage", selectedImage); // Menambahkan gambar ke FormData
+        formData.append("productName", values.productName);
+        formData.append("price", values.price);
+        formData.append("stock", values.stock);
+        formData.append("desc", values.desc);
+        const response = await api.post("/products", formData, {
           headers: {
-            'Content-Type': 'multipart/form-data',
+            "Content-Type": "multipart/form-data",
           },
         });
 
         toast({
-          title: 'nice!',
-          description: 'product successfully created!',
-          status: 'success',
+          title: "nice!",
+          description: "product successfully created!",
+          status: "success",
           duration: 5000,
           isClosable: true,
-          position: 'top',
+          position: "top",
         });
 
         onClose();
@@ -92,12 +92,12 @@ export const ModalInputProduct = ({ isOpen, onClose, fetchProducts, id }) => {
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader className='font-sans'>Add New Product</ModalHeader>
+        <ModalHeader className="font-sans">Add New Product</ModalHeader>
         <ModalCloseButton />
         <form onSubmit={formik.handleSubmit}>
           <ModalBody>
-            <Center flexDir='column' gap={'15px'}>
-              <img
+            <Center flexDir="column" gap={"15px"}>
+              {/* <img
                 className='cursor-pointer'
                 src={
                   selectedImage
@@ -107,79 +107,84 @@ export const ModalInputProduct = ({ isOpen, onClose, fetchProducts, id }) => {
                 width={'201px'}
                 height={'143px'}
                 alt='isi dengan gambar'
-              ></img>
+              ></img> */}
               <Input
-                id='image'
-                type='file'
-                accept='image/*'
+                id="image"
+                type="file"
+                accept="image/*"
                 onChange={(e) => setSelectedImage(e.target.files[0])}
-                style={{ display: 'none' }}
+                style={{ display: "none" }}
               />
-              <label htmlFor='image' className='cursor-pointer'>
+              <label htmlFor="image" className="cursor-pointer">
                 Choose Image
               </label>
               <FormControl
-                id='productName'
+                id="productName"
                 isInvalid={
                   formik.touched.productName && formik.errors.productName
                 }
-                maxW='300px'
+                maxW="300px"
               >
                 <FormLabel>Product Name</FormLabel>
                 <Input
-                  type='text'
-                  {...formik.getFieldProps('productName')}
-                  placeholder='Product Name'
+                  type="text"
+                  {...formik.getFieldProps("productName")}
+                  placeholder="Product Name"
                 />
                 <FormErrorMessage>{formik.errors.productName}</FormErrorMessage>
               </FormControl>
               <FormControl
-                id='price'
+                id="price"
                 isInvalid={formik.touched.price && formik.errors.price}
-                maxW='300px'
+                maxW="300px"
               >
                 <FormLabel>Price</FormLabel>
                 <Input
-                  type='number'
-                  {...formik.getFieldProps('price')}
-                  placeholder='Price'
+                  type="number"
+                  {...formik.getFieldProps("price")}
+                  placeholder="Price"
                 />
                 <FormErrorMessage>{formik.errors.price}</FormErrorMessage>
               </FormControl>
               <FormControl
-                id='stock'
+                id="stock"
                 isInvalid={formik.touched.stock && formik.errors.stock}
-                maxW='300px'
+                maxW="300px"
               >
                 <FormLabel>Stock</FormLabel>
                 <Input
-                  type='number'
-                  {...formik.getFieldProps('stock')}
-                  placeholder='Stock'
+                  type="number"
+                  {...formik.getFieldProps("stock")}
+                  placeholder="Stock"
                 />
                 <FormErrorMessage>{formik.errors.stock}</FormErrorMessage>
               </FormControl>
               <FormControl
-                id='desc'
+                id="desc"
                 isInvalid={formik.touched.desc && formik.errors.desc}
-                maxW='300px'
+                maxW="300px"
               >
                 <FormLabel>Description</FormLabel>
                 <Input
-                  type='text'
-                  {...formik.getFieldProps('desc')}
-                  placeholder='Description'
+                  type="text"
+                  {...formik.getFieldProps("desc")}
+                  placeholder="Description"
                 />
                 <FormErrorMessage>{formik.errors.desc}</FormErrorMessage>
               </FormControl>
+              <select name="" id="">
+                <option value="1">Coffee</option>
+                <option value="2">Non-Coffee</option>
+                <option value="3">Pizza</option>
+              </select>
             </Center>
           </ModalBody>
           <ModalFooter>
-            <Button type='submit' colorScheme='green' mr={3}>
+            <Button type="submit" colorScheme="green" mr={3}>
               Submit
             </Button>
             {id ? (
-              <Button type='button' colorScheme='red' mr={3} onClick={remove}>
+              <Button type="button" colorScheme="red" mr={3} onClick={remove}>
                 Delete
               </Button>
             ) : null}
