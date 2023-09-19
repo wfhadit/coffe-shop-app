@@ -119,8 +119,7 @@ export const CashierAccountManagement = () => {
                 </h4>
                 <span>
                   <Button
-                    className="d-xxs-smallfont"
-                    variant="warning"
+                    className="d-xxs-smallfont bg-cyan-300 text-dark"
                     onClick={() => setShowModal("ModalCreateNewCashierAccount")}
                   >
                     Add New Account
@@ -225,7 +224,11 @@ export const TableDataCashierAccount = ({
       <td className={account.isActive ? "bg-info-subtle" : "bg-danger-subtle"}>
         {account.isActive ? "Active" : "Disabled"}
         <Button
-          variant={account.isActive ? "danger" : "success"}
+          className={
+            account.isActive
+              ? "bg-danger-subtle text-dark border-danger-subtle"
+              : "bg-info-subtle text-dark border-info-subtle"
+          }
           style={{ float: "right" }}
           onClick={() => setShow("SETACTIVE")}
         >
@@ -238,7 +241,7 @@ export const TableDataCashierAccount = ({
           {account?.createdAt?.split("T")[1].slice(0, 8)}
         </span>
         <Button
-          variant="danger"
+          className="bg-danger-subtle text-dark border-danger-subtle"
           style={{ float: "right" }}
           onClick={() => setShow("DELETE")}
         >

@@ -25,7 +25,10 @@ import { ModalEditTransaction } from "../../components/ModalEditTransaction";
 
 export const CashierLandingPage = ({ search }) => {
   const toast = useToast();
+  const [searchKey, setSearchKey] = useState("");
   const [button, setButton] = useState(true);
+  const [categories, setCategories] = useState([]);
+  const [searchCategory, setSearchCategory] = useState(0);
   const [products, setProducts] = useState([]);
   const [showTransaction, setShowTransaction] = useState(0); // untuk show transaction
   const [showModal, setShowModal] = useState("");
@@ -36,6 +39,16 @@ export const CashierLandingPage = ({ search }) => {
   const [totalOutstandingTransaction, setTotalOutstandingTransaction] =
     useState(0);
   const userSelector = useSelector((state) => state.auth);
+
+  const fetchCategories = async () => {
+    try {
+      const { data } = await api.get("/category");
+      setCategories(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const fetchOutstandingTransaction = async () => {
     try {
       const { data } = await api.get("/transactions/outstanding", {
@@ -50,6 +63,7 @@ export const CashierLandingPage = ({ search }) => {
       console.log(err);
     }
   };
+
   const fetchAnyTransaction = async (transactionId) => {
     try {
       if (transactionId) {
@@ -65,6 +79,7 @@ export const CashierLandingPage = ({ search }) => {
       console.log(err);
     }
   };
+
   const fetchProducts = async () => {
     try {
       const res = await api.get("/products");
@@ -73,6 +88,7 @@ export const CashierLandingPage = ({ search }) => {
       console.log(err);
     }
   };
+
   const createNewTransaction = async (order_type) => {
     await api
       .post(
@@ -137,6 +153,7 @@ export const CashierLandingPage = ({ search }) => {
 
   useEffect(() => {
     fetchProducts();
+    fetchCategories();
   }, []);
 
   const handleReset = async () => {
@@ -147,6 +164,7 @@ export const CashierLandingPage = ({ search }) => {
     setAnyTransaction(temp);
     handleSave();
   };
+
   const handleSave = async () => {
     try {
       setButton(false);
@@ -255,10 +273,38 @@ export const CashierLandingPage = ({ search }) => {
         <Col className="xs-no-p-m">
           {/* <Container> */}
           <Row className="mb-2">
-            <SearchboxBootstrap />
+            <SearchboxBootstrap setSearchKey={setSearchKey} />
           </Row>
           <Row className="m-0">
-            <div>Category</div>
+            <div className="d-flex gap-2 flex-wrap">
+              <Button
+                className={
+                  searchCategory === 0
+                    ? "text-dark bg-primary"
+                    : "text-dark bg-cyan-300 border-cyan-300"
+                }
+                id={`category` + 0}
+                onClick={(e) => setSearchCategory(0)}
+              >
+                All
+              </Button>
+              {categories.map((category, index) => (
+                <Button
+                  key={`category-` + index}
+                  className={
+                    searchCategory === category.id
+                      ? "text-dark bg-primary"
+                      : "text-dark bg-cyan-300 border-cyan-300"
+                  }
+                  id={`category` + category.id}
+                  onClick={(e) =>
+                    setSearchCategory(Number(e.target.id.slice(8)))
+                  }
+                >
+                  {category.category_name}
+                </Button>
+              ))}
+            </div>
           </Row>
           <Row className="m-0">
             {products.length &&
@@ -272,6 +318,8 @@ export const CashierLandingPage = ({ search }) => {
                     item={item}
                     index={index}
                     showTransaction={showTransaction}
+                    searchKey={searchKey}
+                    searchCategory={searchCategory}
                   />
                 );
               })}
@@ -282,7 +330,7 @@ export const CashierLandingPage = ({ search }) => {
           <Col lg={4} xs={6} className="col">
             {/* <Container> */}
             <Button
-              className="mb-2 d-xxs-smallfont bg-info-subtle border-info-subtle text-dark"
+              className="mb-2 d-xxs-smallfont bg-cyan-300 border-info-subtle text-dark"
               onClick={() => {
                 setShowTransaction(0);
                 setAnyTransaction({});
@@ -295,7 +343,7 @@ export const CashierLandingPage = ({ search }) => {
                 className={
                   "" + anyTransaction?.Transaction_order_type?.order_type ===
                   "Dine In"
-                    ? "d-flex flex-wrap bg-danger-subtle justify-content-between"
+                    ? "d-flex flex-wrap bg-info-subtle justify-content-between"
                     : anyTransaction?.Transaction_order_type?.order_type ===
                       "Take Away"
                     ? "d-flex flex-wrap bg-success-subtle justify-content-between"
@@ -408,7 +456,7 @@ export const CashierLandingPage = ({ search }) => {
                     <Button
                       variant="info"
                       onClick={() => setShowModal("RESET TRANSACTION")}
-                      className="d-xxs-smallfont bg-info-subtle border-info-subtle text-dark"
+                      className="d-xxs-smallfont bg-cyan-300 border-info-subtle text-dark"
                     >
                       Reset
                     </Button>
@@ -425,12 +473,12 @@ export const CashierLandingPage = ({ search }) => {
                                 duration: 2000,
                               })
                       }
-                      className="d-xxs-smallfont bg-info-subtle border-info-subtle text-dark"
+                      className="d-xxs-smallfont bg-cyan-300 border-info-subtle text-dark"
                     >
                       Save
                     </Button>
                     <Button
-                      className="d-xxs-smallfont bg-info-subtle border-info-subtle text-dark"
+                      className="d-xxs-smallfont bg-cyan-300 border-info-subtle text-dark"
                       onClick={() => setShowModal("PAY")}
                     >
                       Pay
@@ -444,7 +492,8 @@ export const CashierLandingPage = ({ search }) => {
         ) : (
           <Col xl={2} lg={3} xs={4} className="col">
             <Button
-              className="position-relative w-100 bg-info-subtle border-info-subtle text-dark"
+              className="position-relative w-100 bg-cyan-300 border-info-subtle text-dark"
+              variant="info"
               onClick={() => setNewTransaction(!newTransaction)}
             >
               New Transaction
@@ -452,7 +501,7 @@ export const CashierLandingPage = ({ search }) => {
             {newTransaction ? (
               <div className="d-flex flex-column gap-2 my-2">
                 <Button
-                  variant="text-dark bg-danger-subtle border-danger-subtle"
+                  variant="text-dark bg-info-subtle border-info-subtle"
                   onClick={() => createNewTransaction(1)}
                 >
                   Dine In
@@ -498,7 +547,7 @@ export const CashierLandingPage = ({ search }) => {
                       <div
                         className={`d-flex py-1 px-2 justify-content-center rounded-pill gap-1 w-100 ${
                           val.order_type === 1
-                            ? "bg-danger-subtle"
+                            ? "bg-info-subtle"
                             : val.order_type === 2
                             ? "bg-success-subtle"
                             : val.order_type === 3
