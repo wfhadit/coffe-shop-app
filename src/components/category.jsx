@@ -40,7 +40,7 @@ export const CategoryCard = ({ category, fetchCategories }) => {
       <ModalInputCategory
         isOpen={isOpen}
         onClose={onClose}
-        fetchProducts={fetchCategories}
+        fetchCategories={fetchCategories}
         id={category.id}
       />
     </>

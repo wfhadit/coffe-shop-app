@@ -45,7 +45,7 @@ export const CategoriesPage = ({ search }) => {
             </Flex>
             <CategoryList
               categories={[...categories]}
-              fetchProducts={fetchCategories}
+              fetchCategories={fetchCategories}
             />
             <ModalInputCategory
               isOpen={isOpen}
