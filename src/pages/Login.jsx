@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button, Card, Container, Form } from "react-bootstrap";
-import loginBackgroundImage from "../assets/backgroundLogin.jpg";
+import loginBackgroundImage from "../assets/bgLogin.jpeg";
 import { SVGeye, SVGslashedEye } from "../components/SVG/SVGeye";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -113,9 +113,12 @@ export const Login = () => {
             width: "100%",
             position: "relative",
             borderRadius: "50px",
+            backgroundColor: "transparent",
           }}
         >
-          <h2 className="mt-2">Login</h2>
+          <h1 className="mt-2" style={{ fontSize: "20px" }}>
+            <b>Login</b>
+          </h1>
           <Form>
             <Form.Group className="mb-3" controlId="UsernameLoginForm">
               <Form.Label>Username</Form.Label>
@@ -162,9 +165,8 @@ export const Login = () => {
               <div className="text-danger"> {formik.errors.password}</div>
               <div className="w-100 d-flex justify-content-center">
                 <Button
-                  variant="primary"
+                  className="bg-transparent mt-4 border-secondary text-dark"
                   onClick={formik.handleSubmit}
-                  className="mt-4"
                 >
                   Login
                 </Button>
