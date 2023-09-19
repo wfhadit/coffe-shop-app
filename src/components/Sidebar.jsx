@@ -28,7 +28,7 @@ function Sidebar() {
             href="/account_management"
             className={
               window.location.pathname === "/account_management"
-                ? "bg-success-subtle "
+                ? "bg-info-subtle"
                 : null
             }
           >
@@ -38,7 +38,7 @@ function Sidebar() {
             href="/dashboard"
             className={
               window.location.pathname === "/dashboard"
-                ? "bg-success-subtle "
+                ? "bg-info-subtle"
                 : null
             }
           >
@@ -48,7 +48,7 @@ function Sidebar() {
             href="/categories"
             className={
               window.location.pathname === "/categories"
-                ? "bg-success-subtle "
+                ? "bg-info-subtle"
                 : null
             }
           >

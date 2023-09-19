@@ -20,6 +20,8 @@ import { SVGup } from "../../components/SVG/SVGup";
 import { SVGdown } from "../../components/SVG/SVGdown";
 import { SVGx } from "../../components/SVG/SVGx";
 import { ModalConfirmationPayResetDeleteTransaction } from "../../components/ModalConfirmationPayResetDeleteTransaction";
+import { async } from "q";
+import { ModalEditTransaction } from "../../components/ModalEditTransaction";
 
 export const CashierLandingPage = ({ search }) => {
   const toast = useToast();
@@ -27,6 +29,7 @@ export const CashierLandingPage = ({ search }) => {
   const [products, setProducts] = useState([]);
   const [showTransaction, setShowTransaction] = useState(0); // untuk show transaction
   const [showModal, setShowModal] = useState("");
+  const [modalEditTransaction, setModalEditTransaction] = useState(false);
   const [newTransaction, setNewTransaction] = useState(false);
   const [outstandingTransaction, setOutstandingTransaction] = useState([]);
   const [anyTransaction, setAnyTransaction] = useState({});
@@ -99,6 +102,7 @@ export const CashierLandingPage = ({ search }) => {
         },
       });
       fetchOutstandingTransaction();
+      fetchProducts();
     } catch (err) {
       console.log(err);
       if (typeof err?.response?.data === "string")
@@ -123,22 +127,25 @@ export const CashierLandingPage = ({ search }) => {
 
   useEffect(() => {
     fetchAnyTransaction(showTransaction);
+    fetchProducts();
   }, [showTransaction]);
 
   useEffect(() => {
     fetchOutstandingTransaction();
+    fetchProducts();
   }, [userSelector]);
 
   useEffect(() => {
     fetchProducts();
   }, []);
 
-  const handleReset = () => {
+  const handleReset = async () => {
     const temp = { ...anyTransaction };
     temp?.Transaction_details?.forEach((val) => {
       val.qty = 0;
     });
     setAnyTransaction(temp);
+    handleSave();
   };
   const handleSave = async () => {
     try {
@@ -154,6 +161,7 @@ export const CashierLandingPage = ({ search }) => {
         }
       );
       await fetchAnyTransaction(showTransaction);
+      fetchProducts();
       toast({
         title: "Successfully update this transaction",
         position: "top",
@@ -185,7 +193,6 @@ export const CashierLandingPage = ({ search }) => {
         if (result === 0)
           throw new Error("Error in updating transaction details to database");
       });
-      console.log(anyTransaction);
       anyTransaction.isPaid = true;
       anyTransaction.total =
         (11 / 100) *
@@ -221,13 +228,33 @@ export const CashierLandingPage = ({ search }) => {
     }
   };
 
+  const handleChangeTransaction = async (order_type, name) => {
+    const data = {
+      ...anyTransaction,
+      ...(name && { name }),
+      ...(order_type && { order_type: Number(order_type) }),
+    };
+    delete data.updatedAt;
+    delete data.createdAt;
+    await api
+      .patch(`/transactions/` + anyTransaction?.id, data, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("cs-token"),
+          "api-key": userSelector?.username,
+        },
+      })
+      .catch((err) => console.log(err));
+    fetchAnyTransaction(anyTransaction?.id);
+    fetchOutstandingTransaction();
+  };
+
   return (
     <div>
       <Header />
       <Row className="m-0">
         <Col className="xs-no-p-m">
           {/* <Container> */}
-          <Row className="m-0">
+          <Row className="mb-2">
             <SearchboxBootstrap />
           </Row>
           <Row className="m-0">
@@ -255,8 +282,7 @@ export const CashierLandingPage = ({ search }) => {
           <Col lg={4} xs={6} className="col">
             {/* <Container> */}
             <Button
-              className="mb-2 d-xxs-smallfont"
-              variant="info"
+              className="mb-2 d-xxs-smallfont bg-info-subtle border-info-subtle text-dark"
               onClick={() => {
                 setShowTransaction(0);
                 setAnyTransaction({});
@@ -269,24 +295,39 @@ export const CashierLandingPage = ({ search }) => {
                 className={
                   "" + anyTransaction?.Transaction_order_type?.order_type ===
                   "Dine In"
-                    ? "d-flex flex-wrap bg-info"
+                    ? "d-flex flex-wrap bg-danger-subtle justify-content-between"
                     : anyTransaction?.Transaction_order_type?.order_type ===
                       "Take Away"
-                    ? "d-flex flex-wrap bg-success"
+                    ? "d-flex flex-wrap bg-success-subtle justify-content-between"
                     : anyTransaction?.Transaction_order_type?.order_type ===
                       "Catering"
-                    ? "d-flex flex-wrap bg-warning"
-                    : "d-flex flex-wrap"
+                    ? "d-flex flex-wrap bg-warning-subtle justify-content-between"
+                    : "d-flex flex-wrap justify-content-between"
                 }
               >
+                <ModalEditTransaction
+                  show={modalEditTransaction}
+                  setShow={setModalEditTransaction}
+                  currentTransaction={{ ...anyTransaction }}
+                  setAnyTransaction={setAnyTransaction}
+                  handleChangeTransaction={handleChangeTransaction}
+                />
                 <span className="border border-secondary rounded px-1">
                   Order No. {anyTransaction?.id}
                 </span>
-                <span className="border border-secondary rounded px-1">
+                <span
+                  className="border border-secondary rounded px-1"
+                  onClick={() => setModalEditTransaction(true)}
+                  type="button"
+                >
                   {anyTransaction?.Transaction_order_type?.order_type}
                 </span>
-                <span className="border border-secondary rounded px-1">
-                  Table/Name{anyTransaction?.name}
+                <span
+                  className="border border-secondary rounded px-1"
+                  onClick={() => setModalEditTransaction(true)}
+                  type="button"
+                >
+                  {anyTransaction?.name ? anyTransaction?.name : "Table/Name"}
                 </span>
               </Card.Header>
               <ListGroup variant="flush">
@@ -305,6 +346,8 @@ export const CashierLandingPage = ({ search }) => {
                         (val, index) => (
                           <TableTransaction
                             product={val}
+                            setProducts={setProducts}
+                            products={products}
                             index={index}
                             currentTransaction={{ ...anyTransaction }}
                             setAnyTransaction={setAnyTransaction}
@@ -365,12 +408,11 @@ export const CashierLandingPage = ({ search }) => {
                     <Button
                       variant="info"
                       onClick={() => setShowModal("RESET TRANSACTION")}
-                      className="d-xxs-smallfont"
+                      className="d-xxs-smallfont bg-info-subtle border-info-subtle text-dark"
                     >
                       Reset
                     </Button>
                     <Button
-                      variant="info"
                       onClick={
                         button
                           ? handleSave
@@ -383,13 +425,12 @@ export const CashierLandingPage = ({ search }) => {
                                 duration: 2000,
                               })
                       }
-                      className="d-xxs-smallfont"
+                      className="d-xxs-smallfont bg-info-subtle border-info-subtle text-dark"
                     >
                       Save
                     </Button>
                     <Button
-                      variant="info"
-                      className="d-xxs-smallfont"
+                      className="d-xxs-smallfont bg-info-subtle border-info-subtle text-dark"
                       onClick={() => setShowModal("PAY")}
                     >
                       Pay
@@ -403,25 +444,29 @@ export const CashierLandingPage = ({ search }) => {
         ) : (
           <Col xl={2} lg={3} xs={4} className="col">
             <Button
-              variant="info"
-              className="position-relative w-100"
+              className="position-relative w-100 bg-info-subtle border-info-subtle text-dark"
               onClick={() => setNewTransaction(!newTransaction)}
             >
               New Transaction
             </Button>
             {newTransaction ? (
               <div className="d-flex flex-column gap-2 my-2">
-                <Button variant="info" onClick={() => createNewTransaction(1)}>
+                <Button
+                  variant="text-dark bg-danger-subtle border-danger-subtle"
+                  onClick={() => createNewTransaction(1)}
+                >
                   Dine In
                 </Button>
                 <Button
-                  variant="success"
                   onClick={() => createNewTransaction(2)}
+                  variant="success"
+                  className="text-dark bg-success-subtle border-success-subtle"
                 >
                   Take Away
                 </Button>
                 <Button
                   variant="warning"
+                  className="bg-warning-subtle border-warning-subtle"
                   onClick={() => createNewTransaction(3)}
                 >
                   Cathering
@@ -451,13 +496,13 @@ export const CashierLandingPage = ({ search }) => {
                         handleDeleteTransaction={handleDeleteTransaction}
                       />
                       <div
-                        className={`d-flex px-2 text-center rounded-pill gap-1 w-100 ${
+                        className={`d-flex py-1 px-2 justify-content-center rounded-pill gap-1 w-100 ${
                           val.order_type === 1
-                            ? "bg-info"
+                            ? "bg-danger-subtle"
                             : val.order_type === 2
-                            ? "bg-success"
+                            ? "bg-success-subtle"
                             : val.order_type === 3
-                            ? "bg-warning"
+                            ? "bg-warning-subtle"
                             : null
                         }`}
                         type="button"
@@ -496,31 +541,57 @@ const TableTransaction = ({
   index,
   currentTransaction,
   setAnyTransaction,
+  products,
+  setProducts,
 }) => {
+  const toast = useToast();
   const [showModal, setShowModal] = useState("");
   const [quantity, setQuantity] = useState(
     currentTransaction.Transaction_details[index].qty
   );
-  const stock = useRef(product?.Product?.stock);
-  const ref = useRef();
+  const indexProduct = products.findIndex(
+    (val) => val.id === product?.Product?.id
+  );
+  console.log(`index`, indexProduct);
+  const [stock, setStock] = useState(0);
+  useEffect(() => {
+    setStock(products[indexProduct]?.stock);
+  }, [products[indexProduct]?.stock]);
+  console.log(stock, `here`);
 
+  const ref = useRef();
   const handleDeleteTransactionDetail = () => {
     currentTransaction.Transaction_details[index].qty = 0;
     setAnyTransaction(currentTransaction);
   };
 
   const handleAddQuantity = () => {
-    if (stock.current === 0) return;
+    if (stock === 0)
+      return toast({
+        title: "Quantity reachs maximum stock",
+        duration: 2000,
+        isClosable: true,
+        position: "top",
+        status: "warning",
+      });
     ref.current = quantity;
     ref.current += 1;
-    stock.current -= 1;
+    const newStock = stock - 1;
+    setStock(newStock);
+    const temp = [...products];
+    temp[indexProduct].stock = newStock;
+    setProducts(temp);
     setQuantity(ref.current);
   };
   const handleSubtractQuantity = () => {
     if (quantity === 0) return;
     ref.current = quantity;
     ref.current -= 1;
-    stock.current += 1;
+    const newStock = stock + 1;
+    setStock(newStock);
+    const temp = [...products];
+    temp[indexProduct].stock = newStock;
+    setProducts(temp);
     setQuantity(ref.current);
   };
 

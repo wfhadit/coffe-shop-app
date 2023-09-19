@@ -4,6 +4,7 @@ import { SVGminus, SVGplus } from "./SVG/SVGplus";
 import { useEffect, useRef, useState } from "react";
 import "../pages/Adminpages/style.css";
 import { useToast } from "@chakra-ui/react";
+import { API_URL } from "../API/api";
 
 export const ProductCardCashier = ({
   products,
@@ -41,7 +42,7 @@ export const ProductCardCashier = ({
         qty: quantity,
         discount: 0,
         status: 1,
-        Product: { productName: item?.productName },
+        Product: { productName: item?.productName, id: item?.id },
       });
     } else if (last_qty || currentItemTransaction?.productId) {
       const index = currentTransaction?.Transaction_details.findLastIndex(
@@ -52,14 +53,16 @@ export const ProductCardCashier = ({
         ["qty"]: quantity,
       });
     }
-    console.log(`here`);
     setAnyTransaction(currentTransaction);
     const temp = [...products];
     temp[index].stock += last_qty - quantity;
     setProducts(temp);
   }, [quantity]);
+
+  console.log(`here`, products[index]?.stock);
+
   return (
-    <Col key={`cardProd-${index}`} lg={3} xs={6}>
+    <Col key={`cardProd-${index}`} xl={3} lg={4} md={6} xs={6} className="mt-3">
       <Card
         className="position-relative"
         type="button"
@@ -80,7 +83,7 @@ export const ProductCardCashier = ({
       >
         <Card.Img
           variant="top"
-          src={`http://localhost:2500/public/product/` + item.imageName}
+          src={API_URL + `/public/product/` + item.imageName}
           style={{
             aspectRatio: "1/1",
             width: "100%",
@@ -94,9 +97,9 @@ export const ProductCardCashier = ({
           <div
             className="position-absolute d-flex justify-content-center w-100"
             style={{
-              top: "calc(20px + 5vw)",
+              top: "5vw",
               zIndex: "2",
-              gap: "calc(2px + 1vw)",
+              gap: "calc(1vw)",
             }}
           >
             <div
@@ -105,7 +108,6 @@ export const ProductCardCashier = ({
                 if (ref.current < 0) return (ref.current = 0);
                 if (ref.current === 0) return;
                 ref.current -= 1;
-                item.stock += 1;
                 setQuantity(ref.current);
               }}
             >
@@ -125,8 +127,9 @@ export const ProductCardCashier = ({
                   textAlign: "center",
                 }}
                 onChange={(e) => {
-                  if (e.target.value > item.stock + last_qty)
+                  if (e.target.value > item.stock + last_qty) {
                     e.target.value = item.stock + last_qty;
+                  }
                   setQuantity(Number(e.target.value));
                 }}
               />
@@ -142,7 +145,6 @@ export const ProductCardCashier = ({
                     duration: 2000,
                   });
                 ref.current += 1;
-                item.stock -= 1;
                 setQuantity(ref.current);
               }}
             >
@@ -150,19 +152,24 @@ export const ProductCardCashier = ({
             </div>
           </div>
         ) : null}
-        <Card.Body>
-          <Card.Title
-            className="d-xxs-smallfont text-center"
-            style={{ textTransform: "capitalize" }}
-          >
-            {item.productName.toLowerCase()}
-          </Card.Title>
-          {/* <Card.Text>
-            Some quick example text to build on the card title and make up the
-            bulk of the card's content.
-          </Card.Text> */}
-        </Card.Body>
+        <Card.Title
+          className="card-cashier-page text-center position-absolute bottom-0 w-100 mb-0 bg-info-subtle"
+          style={{
+            textTransform: "capitalize",
+            maxHeight: "48px",
+          }}
+        >
+          {item.productName.toLowerCase()}
+        </Card.Title>
       </Card>
+      <Card.Body>
+        <Card.Text className="td-cashier-page text-center">
+          Price: IDR{item?.price.toLocaleString(`id-ID`)}
+        </Card.Text>
+        <Card.Text className="td-cashier-page text-center">
+          Stock: {item?.stock.toLocaleString(`id-ID`)}
+        </Card.Text>
+      </Card.Body>
     </Col>
   );
 };

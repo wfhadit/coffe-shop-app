@@ -222,9 +222,7 @@ export const TableDataCashierAccount = ({
       <td className="d-xxs-none">{account.username}</td>
       <td>{account.fullname}</td>
       <td className="d-none d-sm-table-cell">{account.gender}</td>
-      <td
-        className={account.isActive ? "bg-success-subtle" : "bg-danger-subtle"}
-      >
+      <td className={account.isActive ? "bg-info-subtle" : "bg-danger-subtle"}>
         {account.isActive ? "Active" : "Disabled"}
         <Button
           variant={account.isActive ? "danger" : "success"}
