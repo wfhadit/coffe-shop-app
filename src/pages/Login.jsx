@@ -88,7 +88,7 @@ export const Login = () => {
 
   return (
     <div>
-      <div class='bg-gray-800 text-white py-2 overflow-hidden'>
+      <div class='bg-gray-800 text-white py-2 overflow-hidden animate-bounce'>
         <div class='marquee text-lg font-mono'>MINI PROJECT 3 | POS</div>
       </div>
 
