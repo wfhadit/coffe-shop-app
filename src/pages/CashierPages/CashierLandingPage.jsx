@@ -22,7 +22,6 @@ import { SVGx } from "../../components/SVG/SVGx";
 import { ModalConfirmationPayResetDeleteTransaction } from "../../components/ModalConfirmationPayResetDeleteTransaction";
 import { ModalEditTransaction } from "../../components/ModalEditTransaction";
 import { io } from "socket.io-client";
-
 const socketConnection = io(API_URL);
 
 export const CashierLandingPage = () => {
@@ -113,6 +112,7 @@ export const CashierLandingPage = () => {
         fetchOutstandingTransaction();
       })
       .catch((err) => console.log(err));
+    socketConnection.connect();
 
     setNewTransaction(!newTransaction);
   };
@@ -127,6 +127,7 @@ export const CashierLandingPage = () => {
       });
       fetchOutstandingTransaction();
       fetchProducts();
+      socketConnection.connect();
     } catch (err) {
       console.log(err);
       if (typeof err?.response?.data === "string")
@@ -257,6 +258,7 @@ export const CashierLandingPage = () => {
       .catch((err) => console.log(err));
     fetchAnyTransaction(anyTransaction?.id);
     fetchOutstandingTransaction();
+    socketConnection.connect();
   };
 
   useEffect(() => {
