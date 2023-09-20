@@ -1,13 +1,14 @@
-import { useEffect, useState } from "react";
-import { Button, Card, Container, Form } from "react-bootstrap";
-import loginBackgroundImage from "../assets/bgLogin.jpeg";
-import { SVGeye, SVGslashedEye } from "../components/SVG/SVGeye";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import { useDispatch, useSelector } from "react-redux";
-import { userLogin } from "../redux/middlewares/auth-middleware";
-import { useNavigate } from "react-router-dom";
-import { useToast } from "@chakra-ui/react";
+import { useEffect, useState } from 'react';
+import { Button, Card, Container, Form } from 'react-bootstrap';
+import loginBackgroundImage from '../assets/bgggg.png';
+import { SVGeye, SVGslashedEye } from '../components/SVG/SVGeye';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { useDispatch, useSelector } from 'react-redux';
+import { userLogin } from '../redux/middlewares/auth-middleware';
+import { useNavigate } from 'react-router-dom';
+import { useToast } from '@chakra-ui/react';
+import './Adminpages/Login.css';
 
 export const Login = () => {
   const nav = useNavigate();
@@ -18,28 +19,28 @@ export const Login = () => {
 
   const toastProcessing = () =>
     toast({
-      title: "Processing",
-      position: "top",
+      title: 'Processing',
+      position: 'top',
       duration: 1000,
       isClosable: true,
-      status: "loading",
+      status: 'loading',
     });
-  const toastSuccess = (title = "success", description = "") =>
+  const toastSuccess = (title = 'success', description = '') =>
     toast({
       title: title,
-      position: "top",
+      position: 'top',
       duration: 1500,
       isClosable: true,
-      status: "success",
+      status: 'success',
       description: description,
     });
-  const toastError = (title = "Error", description = "") =>
+  const toastError = (title = 'Error', description = '') =>
     toast({
       title: title,
-      position: "top",
+      position: 'top',
       duration: 1500,
       isClosable: true,
-      status: "error",
+      status: 'error',
       description: description,
     });
 
@@ -54,127 +55,103 @@ export const Login = () => {
     }),
     onSubmit: async (values) => {
       if (!values.username || !values.password) {
-        return toastError("Error Login", "please fill the form");
+        return toastError('Error Login', 'please fill the form');
       }
       toastProcessing();
       await dispatch(userLogin(values))
         .then((result) => {
           console.log(result);
           if (result === 1) {
-            toastSuccess("Login success");
+            toastSuccess('Login success');
             nav(`/account_management`);
           } else if (result === 2) {
-            toastSuccess("Login success");
+            toastSuccess('Login success');
             nav(`/TheCoffeeSpace`);
           } else {
-            toastError("Login failed", result.response?.data);
+            toastError('Login failed', result.response?.data);
           }
         })
         .catch((err) => {
           console.log(err);
-          toastError("Login failed", err?.response?.data);
+          toastError('Login failed', err?.response?.data);
         });
     },
   });
+
   useEffect(() => {
-    if (localStorage.getItem("cs-token") && userSelector.role === 1) {
+    if (localStorage.getItem('cs-token') && userSelector.role === 1) {
       nav(`/account_management`);
-    } else if (localStorage.getItem("cs-token") && userSelector.role === 2) {
+    } else if (localStorage.getItem('cs-token') && userSelector.role === 2) {
       nav(`/TheCoffeeSpace`);
     }
   }, [userSelector.role]);
+
   return (
-    <div
-      style={{
-        display: "flex",
-        position: "relative",
-        alignItems: "center",
-        justifyContent: "center",
-        maxWidth: "100vw",
-        height: "100vh",
-        backgroundImage: `url(${loginBackgroundImage})`,
-        backgroundSize: "cover",
-      }}
-    >
-      <Container
-        style={{
-          display: "flex",
-          position: "relative",
-          alignItems: "center",
-          justifyContent: "center",
-          width: "100vw",
-          height: "100vh",
-        }}
-      >
-        <Card
-          className="d-flex flex-column align-items-center justify-content-center gap-2"
+    <div>
+      <div class='bg-gray-800 text-white py-2 overflow-hidden'>
+        <div class='marquee text-lg font-mono'>MINI PROJECT 3 | POS</div>
+      </div>
+
+      <div className='flex'>
+        <div
+          className='hidden md:block w-1/2 bg-cover bg-center'
           style={{
-            maxWidth: "300px",
-            width: "100%",
-            position: "relative",
-            borderRadius: "50px",
-            backgroundColor: "transparent",
+            backgroundImage: `url(${loginBackgroundImage})`,
+            height: '100vh',
+            opacity: '0.8',
           }}
-        >
-          <h1 className="mt-2" style={{ fontSize: "20px" }}>
-            <b>Login</b>
-          </h1>
-          <Form>
-            <Form.Group className="mb-3" controlId="UsernameLoginForm">
-              <Form.Label>Username</Form.Label>
-              <Form.Control
-                type="text"
-                name="username"
-                placeholder="username"
-                onChange={formik.handleChange}
-                autoFocus
-              />
-              <div className="text-danger"> {formik.errors.username}</div>
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="PasswordLoginForm">
-              <Form.Label>Password</Form.Label>
-              <div
-                className="d-flex align-items-center"
-                style={{ position: "relative" }}
-              >
-                <Form.Control
-                  type={seePassword ? "text" : "password"}
-                  placeholder="password"
-                  name="password"
-                  onChange={formik.handleChange}
-                  autoFocus
-                />
-                {seePassword ? (
-                  <span
-                    style={{ position: "absolute", right: "5px" }}
-                    type="button"
-                    onClick={() => setSeePassword(!seePassword)}
-                  >
-                    <SVGslashedEye />
-                  </span>
-                ) : (
-                  <span
-                    style={{ position: "absolute", right: "5px" }}
-                    type="button"
-                    onClick={() => setSeePassword(!seePassword)}
-                  >
-                    <SVGeye />
-                  </span>
-                )}
-              </div>
-              <div className="text-danger"> {formik.errors.password}</div>
-              <div className="w-100 d-flex justify-content-center">
-                <Button
-                  className="bg-transparent mt-4 border-secondary text-dark"
-                  onClick={formik.handleSubmit}
-                >
-                  Login
-                </Button>
-              </div>
-            </Form.Group>
-          </Form>
-        </Card>
-      </Container>
+        ></div>
+
+        <div className='w-full md:w-1/2 flex items-center justify-center bg-gradient-to-r from-sky-300 to-[#D3A774]'>
+          <Container>
+            <Card className='rounded-lg p-4 items-center shadow-2xl'>
+              <h1 className='text-2xl text-center font-sans font-bold mb-4'>
+                Login
+              </h1>
+              <Form className='w-80'>
+                <Form.Group className='' controlId='UsernameLoginForm'>
+                  <Form.Label className='font-mono'>Username</Form.Label>
+                  <Form.Control
+                    type='text'
+                    name='username'
+                    placeholder='Username'
+                    onChange={formik.handleChange}
+                    autoFocus
+                  />
+                  <div className='text-red-500'>{formik.errors.username}</div>
+                </Form.Group>
+                <Form.Group controlId='PasswordLoginForm'>
+                  <Form.Label className='font-mono'>Password</Form.Label>
+                  <div className='relative'>
+                    <Form.Control
+                      type={seePassword ? 'text' : 'password'}
+                      placeholder='Password'
+                      name='password'
+                      onChange={formik.handleChange}
+                    />
+                    <span
+                      className='absolute right-2 top-2 cursor-pointer'
+                      onClick={() => setSeePassword(!seePassword)}
+                    >
+                      {seePassword ? 'Hide' : 'Show'}
+                    </span>
+                  </div>
+                  <div className='text-red-500'>{formik.errors.password}</div>
+                  <div className='text-center mt-4 w-80'>
+                    <Button
+                      className='bg-sky-300 text-black font-serif w-full'
+                      variant='light'
+                      onClick={formik.handleSubmit}
+                    >
+                      Login
+                    </Button>
+                  </div>
+                </Form.Group>
+              </Form>
+            </Card>
+          </Container>
+        </div>
+      </div>
     </div>
   );
 };
