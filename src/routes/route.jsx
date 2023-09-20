@@ -63,12 +63,12 @@ export const routes = [
       </ProtectedPage>
     )
   ),
-  new RouteClass(
-    "/categories",
-    (
-      <ProtectedPage needLogin={true} AdminOnly={true}>
-        <CategoriesPage />
-      </ProtectedPage>
-    )
-  ),
+  // new RouteClass(
+  //   "/categories",
+  //   (
+  //     <ProtectedPage needLogin={true} AdminOnly={true}>
+  //       <CategoriesPage />
+  //     </ProtectedPage>
+  //   )
+  // ),
 ];
