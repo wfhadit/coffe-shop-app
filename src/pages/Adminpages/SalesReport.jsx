@@ -59,7 +59,9 @@ export const SalesReportPage = () => {
     <>
       <Header />
       <div className='flex flex-row'>
-        <Sidebar />
+        <div className='bg-[#D3A774] px-2 w-60 h-screen'>
+          <Sidebar />
+        </div>
         <div className='flex-grow ml-4'>
           <div className='my-4'>
             <label className='text-gray-600 px-3'>Select date:</label>

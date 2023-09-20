@@ -15,10 +15,13 @@ export const Header = () => {
     window.location.reload();
   };
   return (
-    <Navbar expand='lg' className='bg-body-tertiar'>
+    <Navbar expand='lg' className='bg-[#D3A774]'>
       {/* <Container> */}
-      <Navbar.Brand href='/TheCoffeeSpace' className='px-2'>
-        Coffee Space
+      <Navbar.Brand
+        href='/TheCoffeeSpace'
+        className='font-sans font-bold px-10 underline'
+      >
+        Coffee Space <span className='pl-3'></span>
       </Navbar.Brand>
       <Navbar.Toggle aria-controls='basic-navbar-nav' />
       <Navbar.Collapse id='basic-navbar-nav'>
@@ -31,13 +34,22 @@ export const Header = () => {
                 ? '/TheCoffeeSpace'
                 : null
             }
-            style={{ fontFamily: "sans-serif" }}
+            className='font-sans font-bold text-black'
           >
             Home
           </Nav.Link>
-          <Nav.Link href='/transactions'>Transactions</Nav.Link>
+          <Nav.Link
+            className='font-sans font-bold text-black'
+            href='/transactions'
+          >
+            Transactions
+          </Nav.Link>
           {userSelector.id === 1 ? (
-            <NavDropdown title='Actions' id='basic-nav-dropdown'>
+            <NavDropdown
+              className='font-sans font-bold text-black'
+              title='Actions'
+              id='basic-nav-dropdown'
+            >
               <NavDropdown.Item
                 href='/account_management'
                 className='d-xxs-smallfont'

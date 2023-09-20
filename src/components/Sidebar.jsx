@@ -28,28 +28,28 @@ function Sidebar() {
           <a
             href='/account_management'
             className={
-              window.location.pathname === "/account_management"
-                ? "bg-info-subtle"
+              window.location.pathname === '/account_management'
+                ? 'bg-white rounded-md p-1 font-semibold'
                 : null
             }
           >
             Cashier Account Management
           </a>
           <a
-            href='/dashboard'
+            href='/products'
             className={
-              window.location.pathname === "/dashboard"
-                ? "bg-info-subtle"
+              window.location.pathname === '/products'
+                ? 'bg-white rounded-md p-1 font-semibold'
                 : null
             }
           >
-            Products
+            Product
           </a>
           <a
             href='/categories'
             className={
-              window.location.pathname === "/categories"
-                ? "bg-info-subtle"
+              window.location.pathname === '/categories'
+                ? 'bg-white rounded-md p-1 font-semibold'
                 : null
             }
           >
@@ -59,7 +59,7 @@ function Sidebar() {
             href='/report'
             className={
               window.location.pathname === '/report'
-                ? 'bg-success-subtle '
+                ? 'bg-white rounded-md p-1 font-semibold'
                 : null
             }
           >
