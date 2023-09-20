@@ -9,12 +9,11 @@ import { PostList } from '../../components/post/post-list';
 export const AdminLandingPage = ({ search }) => {
   const discloosure = useDisclosure();
 
-
   return (
     <>
       <Header />
-      <Row style={{ margin: "0" }}>
-        <Col xl={2} lg={2}>
+      <Row style={{ margin: '0' }}>
+        <Col xl={2} lg={2} className='bg-[#D3A774] h-screen'>
           <Sidebar />
         </Col>
         <Col>
@@ -24,15 +23,15 @@ export const AdminLandingPage = ({ search }) => {
               <Flex justifyContent={'right'} bgColor={'blue'}>
                 <img
                   src={add50}
-                  alt=""
+                  alt=''
                   style={{
-                    position: "fixed",
-                    backgroundColor: "white",
-                    borderRadius: "50%",
-                    objectFit: "cover",
-                    cursor: "pointer",
-                    marginRight: "20px",
-                    marginTop: "20px,",
+                    position: 'fixed',
+                    backgroundColor: 'white',
+                    borderRadius: '50%',
+                    objectFit: 'cover',
+                    cursor: 'pointer',
+                    marginRight: '20px',
+                    marginTop: '20px,',
                   }}
                   onClick={() => discloosure.onOpen()}
                 />

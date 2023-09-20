@@ -44,7 +44,7 @@ export const CategoriesPage = () => {
     <>
       <Header />
       <Row style={{ margin: "0" }}>
-        <Col xl={2} lg={2}>
+        <Col xl={2} lg={2} className="bg-cyan-300 vh-100">
           <Sidebar />
         </Col>
         <Col>

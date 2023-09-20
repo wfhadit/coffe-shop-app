@@ -9,7 +9,7 @@ import {
 } from "react-bootstrap";
 import { Header } from "../../components/Header";
 import { useEffect, useRef, useState } from "react";
-import { api } from "../../API/api";
+import { API_URL, api } from "../../API/api";
 import { SearchboxBootstrap } from "../../components/SearchboxBootstrap";
 import { ProductCardCashier } from "../../components/ProductCard";
 import { useSelector } from "react-redux";
@@ -20,12 +20,16 @@ import { SVGup } from "../../components/SVG/SVGup";
 import { SVGdown } from "../../components/SVG/SVGdown";
 import { SVGx } from "../../components/SVG/SVGx";
 import { ModalConfirmationPayResetDeleteTransaction } from "../../components/ModalConfirmationPayResetDeleteTransaction";
-import { async } from "q";
 import { ModalEditTransaction } from "../../components/ModalEditTransaction";
+import { io } from "socket.io-client";
+const socketConnection = io(API_URL);
 
-export const CashierLandingPage = ({ search }) => {
+export const CashierLandingPage = () => {
   const toast = useToast();
+  const [searchKey, setSearchKey] = useState("");
   const [button, setButton] = useState(true);
+  const [categories, setCategories] = useState([]);
+  const [searchCategory, setSearchCategory] = useState(0);
   const [products, setProducts] = useState([]);
   const [showTransaction, setShowTransaction] = useState(0); // untuk show transaction
   const [showModal, setShowModal] = useState("");
@@ -36,6 +40,16 @@ export const CashierLandingPage = ({ search }) => {
   const [totalOutstandingTransaction, setTotalOutstandingTransaction] =
     useState(0);
   const userSelector = useSelector((state) => state.auth);
+
+  const fetchCategories = async () => {
+    try {
+      const { data } = await api.get("/category");
+      setCategories(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const fetchOutstandingTransaction = async () => {
     try {
       const { data } = await api.get("/transactions/outstanding", {
@@ -46,10 +60,14 @@ export const CashierLandingPage = ({ search }) => {
       });
       setOutstandingTransaction(data.rows);
       setTotalOutstandingTransaction(data.count);
+      socketConnection.on(`NEW_TRANSACTION`, (newTransaction) => {
+        fetchOutstandingTransaction();
+      });
     } catch (err) {
       console.log(err);
     }
   };
+
   const fetchAnyTransaction = async (transactionId) => {
     try {
       if (transactionId) {
@@ -65,6 +83,7 @@ export const CashierLandingPage = ({ search }) => {
       console.log(err);
     }
   };
+
   const fetchProducts = async () => {
     try {
       const res = await api.get("/products");
@@ -73,6 +92,7 @@ export const CashierLandingPage = ({ search }) => {
       console.log(err);
     }
   };
+
   const createNewTransaction = async (order_type) => {
     await api
       .post(
@@ -88,8 +108,12 @@ export const CashierLandingPage = ({ search }) => {
           },
         }
       )
+      .then((res) => {
+        fetchOutstandingTransaction();
+      })
       .catch((err) => console.log(err));
-    fetchOutstandingTransaction();
+    socketConnection.connect();
+
     setNewTransaction(!newTransaction);
   };
 
@@ -103,6 +127,7 @@ export const CashierLandingPage = ({ search }) => {
       });
       fetchOutstandingTransaction();
       fetchProducts();
+      socketConnection.connect();
     } catch (err) {
       console.log(err);
       if (typeof err?.response?.data === "string")
@@ -125,20 +150,6 @@ export const CashierLandingPage = ({ search }) => {
     }
   };
 
-  useEffect(() => {
-    fetchAnyTransaction(showTransaction);
-    fetchProducts();
-  }, [showTransaction]);
-
-  useEffect(() => {
-    fetchOutstandingTransaction();
-    fetchProducts();
-  }, [userSelector]);
-
-  useEffect(() => {
-    fetchProducts();
-  }, []);
-
   const handleReset = async () => {
     const temp = { ...anyTransaction };
     temp?.Transaction_details?.forEach((val) => {
@@ -147,6 +158,7 @@ export const CashierLandingPage = ({ search }) => {
     setAnyTransaction(temp);
     handleSave();
   };
+
   const handleSave = async () => {
     try {
       setButton(false);
@@ -231,7 +243,7 @@ export const CashierLandingPage = ({ search }) => {
   const handleChangeTransaction = async (order_type, name) => {
     const data = {
       ...anyTransaction,
-      ...(name && { name }),
+      name,
       ...(order_type && { order_type: Number(order_type) }),
     };
     delete data.updatedAt;
@@ -246,19 +258,63 @@ export const CashierLandingPage = ({ search }) => {
       .catch((err) => console.log(err));
     fetchAnyTransaction(anyTransaction?.id);
     fetchOutstandingTransaction();
+    socketConnection.connect();
   };
+
+  useEffect(() => {
+    fetchAnyTransaction(showTransaction);
+    fetchProducts();
+  }, [showTransaction]);
+
+  useEffect(() => {
+    fetchProducts();
+    fetchCategories();
+    fetchOutstandingTransaction();
+
+    return () => {
+      socketConnection.disconnect();
+    };
+  }, []);
 
   return (
     <div>
       <Header />
-      <Row className="m-0">
+      <Row className="m-0 mt-2">
         <Col className="xs-no-p-m">
           {/* <Container> */}
-          <Row className="mb-2">
-            <SearchboxBootstrap />
+          <Row className="mb-2 mx-0">
+            <SearchboxBootstrap setSearchKey={setSearchKey} />
           </Row>
           <Row className="m-0">
-            <div>Category</div>
+            <div className="d-flex gap-2 flex-wrap">
+              <Button
+                className={
+                  searchCategory === 0
+                    ? "text-dark bg-primary py-0 px-3 card-cashier-page"
+                    : "text-dark bg-cyan-300 border-cyan-300 py-0 px-3 card-cashier-page"
+                }
+                id={`category` + 0}
+                onClick={(e) => setSearchCategory(0)}
+              >
+                All
+              </Button>
+              {categories.map((category, index) => (
+                <Button
+                  key={`category-` + index}
+                  className={
+                    searchCategory === category.id
+                      ? "text-dark bg-primary py-0 px-1 card-cashier-page"
+                      : "text-dark bg-cyan-300 border-cyan-300 py-0 px-1 card-cashier-page"
+                  }
+                  id={`category` + category.id}
+                  onClick={(e) =>
+                    setSearchCategory(Number(e.target.id.slice(8)))
+                  }
+                >
+                  {category.category_name}
+                </Button>
+              ))}
+            </div>
           </Row>
           <Row className="m-0">
             {products.length &&
@@ -272,6 +328,8 @@ export const CashierLandingPage = ({ search }) => {
                     item={item}
                     index={index}
                     showTransaction={showTransaction}
+                    searchKey={searchKey}
+                    searchCategory={searchCategory}
                   />
                 );
               })}
@@ -282,7 +340,7 @@ export const CashierLandingPage = ({ search }) => {
           <Col lg={4} xs={6} className="col">
             {/* <Container> */}
             <Button
-              className="mb-2 d-xxs-smallfont bg-info-subtle border-info-subtle text-dark"
+              className="mb-2 d-xxs-smallfont bg-cyan-300 border-info-subtle text-dark"
               onClick={() => {
                 setShowTransaction(0);
                 setAnyTransaction({});
@@ -295,7 +353,7 @@ export const CashierLandingPage = ({ search }) => {
                 className={
                   "" + anyTransaction?.Transaction_order_type?.order_type ===
                   "Dine In"
-                    ? "d-flex flex-wrap bg-danger-subtle justify-content-between"
+                    ? "d-flex flex-wrap bg-info-subtle justify-content-between"
                     : anyTransaction?.Transaction_order_type?.order_type ===
                       "Take Away"
                     ? "d-flex flex-wrap bg-success-subtle justify-content-between"
@@ -312,22 +370,24 @@ export const CashierLandingPage = ({ search }) => {
                   setAnyTransaction={setAnyTransaction}
                   handleChangeTransaction={handleChangeTransaction}
                 />
-                <span className="border border-secondary rounded px-1">
+                <span className="border border-secondary rounded px-1 td-cashier-page">
                   Order No. {anyTransaction?.id}
                 </span>
                 <span
-                  className="border border-secondary rounded px-1"
+                  className="border border-secondary rounded px-1 d-flex align-items-center gap-2 td-cashier-page"
                   onClick={() => setModalEditTransaction(true)}
                   type="button"
                 >
-                  {anyTransaction?.Transaction_order_type?.order_type}
+                  {anyTransaction?.Transaction_order_type?.order_type}{" "}
+                  <SVGdown />
                 </span>
                 <span
-                  className="border border-secondary rounded px-1"
+                  className="border border-secondary rounded px-1 d-flex align-items-center gap-2 td-cashier-page"
                   onClick={() => setModalEditTransaction(true)}
                   type="button"
                 >
-                  {anyTransaction?.name ? anyTransaction?.name : "Table/Name"}
+                  {anyTransaction?.name ? anyTransaction?.name : "Table/Name"}{" "}
+                  <SVGdown />
                 </span>
               </Card.Header>
               <ListGroup variant="flush">
@@ -408,7 +468,7 @@ export const CashierLandingPage = ({ search }) => {
                     <Button
                       variant="info"
                       onClick={() => setShowModal("RESET TRANSACTION")}
-                      className="d-xxs-smallfont bg-info-subtle border-info-subtle text-dark"
+                      className="d-xxs-smallfont bg-cyan-300 border-info-subtle text-dark"
                     >
                       Reset
                     </Button>
@@ -425,12 +485,12 @@ export const CashierLandingPage = ({ search }) => {
                                 duration: 2000,
                               })
                       }
-                      className="d-xxs-smallfont bg-info-subtle border-info-subtle text-dark"
+                      className="d-xxs-smallfont bg-cyan-300 border-info-subtle text-dark"
                     >
                       Save
                     </Button>
                     <Button
-                      className="d-xxs-smallfont bg-info-subtle border-info-subtle text-dark"
+                      className="d-xxs-smallfont bg-cyan-300 border-info-subtle text-dark"
                       onClick={() => setShowModal("PAY")}
                     >
                       Pay
@@ -444,7 +504,8 @@ export const CashierLandingPage = ({ search }) => {
         ) : (
           <Col xl={2} lg={3} xs={4} className="col">
             <Button
-              className="position-relative w-100 bg-info-subtle border-info-subtle text-dark"
+              className="position-relative w-100 bg-cyan-300 border-info-subtle text-dark"
+              variant="info"
               onClick={() => setNewTransaction(!newTransaction)}
             >
               New Transaction
@@ -452,7 +513,7 @@ export const CashierLandingPage = ({ search }) => {
             {newTransaction ? (
               <div className="d-flex flex-column gap-2 my-2">
                 <Button
-                  variant="text-dark bg-danger-subtle border-danger-subtle"
+                  variant="text-dark bg-info-subtle border-info-subtle"
                   onClick={() => createNewTransaction(1)}
                 >
                   Dine In
@@ -498,7 +559,7 @@ export const CashierLandingPage = ({ search }) => {
                       <div
                         className={`d-flex py-1 px-2 justify-content-center rounded-pill gap-1 w-100 ${
                           val.order_type === 1
-                            ? "bg-danger-subtle"
+                            ? "bg-info-subtle"
                             : val.order_type === 2
                             ? "bg-success-subtle"
                             : val.order_type === 3
@@ -552,12 +613,11 @@ const TableTransaction = ({
   const indexProduct = products.findIndex(
     (val) => val.id === product?.Product?.id
   );
-  console.log(`index`, indexProduct);
+
   const [stock, setStock] = useState(0);
   useEffect(() => {
     setStock(products[indexProduct]?.stock);
   }, [products[indexProduct]?.stock]);
-  console.log(stock, `here`);
 
   const ref = useRef();
   const handleDeleteTransactionDetail = () => {

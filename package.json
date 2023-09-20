@@ -13,6 +13,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.5.0",
     "bootstrap": "^5.3.1",
+    "chart.js": "^4.4.0",
     "debounce": "^1.2.1",
     "formik": "^2.4.4",
     "framer-motion": "^10.16.4",
@@ -26,6 +27,7 @@
     "react-router-dom": "^6.15.0",
     "react-scripts": "5.0.1",
     "redux-thunk": "^2.4.2",
+    "socket.io-client": "^4.7.2",
     "web-vitals": "^2.1.4",
     "yup": "^1.2.0",
     "yup-password": "^0.2.2"

@@ -47,7 +47,7 @@ export const routes = [
     )
   ),
   new RouteClass(
-    "/dashboard",
+    "/products",
 
     (
       <ProtectedPage needLogin={true} AdminOnly={true}>
@@ -64,6 +64,7 @@ export const routes = [
       </ProtectedPage>
     )
   ),
+
   new RouteClass(
     "/categories",
     (
@@ -80,4 +81,5 @@ export const routes = [
       </ProtectedPage>
     )
   ),
+
 ];

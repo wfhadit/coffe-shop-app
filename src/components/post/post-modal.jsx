@@ -105,9 +105,9 @@ export const ModalInputProduct = ({
             `/products/${product.id}`,
             formData,
             {
-              params: {
-                token,
-                user_id: userSelector.id,
+              headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('cs-token'),
+                'api-key': userSelector?.username,
               },
             }
           );
@@ -123,7 +123,8 @@ export const ModalInputProduct = ({
         } else {
           const response = await api.post("/products", formData, {
             headers: {
-              "Content-Type": "multipart/form-data",
+              Authorization: 'Bearer ' + localStorage.getItem('cs-token'),
+              'api-key': userSelector?.username,
             },
           });
           toast({

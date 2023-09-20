@@ -14,6 +14,8 @@ export const ProductCardCashier = ({
   showTransaction,
   currentTransaction,
   setAnyTransaction,
+  searchKey,
+  searchCategory,
 }) => {
   const [showItemController, setShowItemController] = useState(false);
   const currentItemTransaction =
@@ -59,10 +61,25 @@ export const ProductCardCashier = ({
     setProducts(temp);
   }, [quantity]);
 
-  console.log(`here`, products[index]?.stock);
-
   return (
-    <Col key={`cardProd-${index}`} xl={3} lg={4} md={6} xs={6} className="mt-3">
+    <Col
+      key={`cardProd-${index}`}
+      xl={3}
+      lg={4}
+      md={6}
+      xs={6}
+      className="mt-3"
+      hidden={
+        searchCategory === 0
+          ? item?.productName.toLowerCase().match(searchKey)
+            ? false
+            : true
+          : searchCategory === item?.categoryId &&
+            item?.productName.toLowerCase().match(searchKey)
+          ? false
+          : true
+      }
+    >
       <Card
         className="position-relative"
         type="button"
@@ -153,7 +170,7 @@ export const ProductCardCashier = ({
           </div>
         ) : null}
         <Card.Title
-          className="card-cashier-page text-center position-absolute bottom-0 w-100 mb-0 bg-info-subtle"
+          className="card-cashier-page text-center position-absolute bottom-0 w-100 mb-0 bg-cyan-300"
           style={{
             textTransform: "capitalize",
             maxHeight: "48px",

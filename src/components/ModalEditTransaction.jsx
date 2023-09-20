@@ -45,6 +45,7 @@ export const ModalEditTransaction = ({
               type="text"
               placeholder="Name or table number"
               autoFocus
+              defaultValue={currentTransaction?.name}
             />
           </Form.Group>
           <Form.Group className="mb-3">
@@ -65,11 +66,11 @@ export const ModalEditTransaction = ({
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
+        <Button className="bg-secondary border-secondary" onClick={handleClose}>
           Close
         </Button>
         <Button
-          variant="primary"
+          className="bg-cyan-300 border-cyan-300 text-dark"
           onClick={async () => {
             handleChangeTransaction(
               document.getElementById("ordertype_selectoption").value,
