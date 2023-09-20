@@ -45,6 +45,7 @@ export const ModalEditTransaction = ({
               type="text"
               placeholder="Name or table number"
               autoFocus
+              defaultValue={currentTransaction?.name}
             />
           </Form.Group>
           <Form.Group className="mb-3">

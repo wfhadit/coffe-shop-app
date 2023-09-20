@@ -15,11 +15,7 @@ export const Header = () => {
     window.location.reload();
   };
   return (
-    <Navbar
-      expand="lg"
-      className="bg-cyan-300 mb-2"
-      style={{ fontWeight: "bold" }}
-    >
+    <Navbar expand="lg" className="bg-cyan-300" style={{ fontWeight: "bold" }}>
       {/* <Container> */}
       <Navbar.Brand href="/TheCoffeeSpace" className="px-2">
         Coffee Space
