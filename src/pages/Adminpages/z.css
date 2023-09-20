@@ -1,0 +1,49 @@
+.images {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  margin: 100px auto;
+  width: 60%;
+  min-height: 70vh;
+}
+
+.image {
+  width: 30%;
+  height: 30%;
+  color: #eee;
+  border-radius: 10px;
+  box-shadow: 3px 3px 3px #9e9e9e;
+  overflow: hidden;
+}
+
+.image img {
+  display: block;
+  width: 100%;
+}
+
+.pagination {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 5rem;
+  font-size: 1.2rem;
+  gap: 5px;
+}
+
+.pagination .page-num {
+  padding: 8px 15px;
+  cursor: pointer;
+  border-radius: 3px;
+  font-weight: 400;
+}
+
+.pagination .page-num:hover {
+  background-color: #5ab1bb;
+  color: #fff;
+}
+
+.pagination .active {
+  background-color: #5ab1bb;
+}
