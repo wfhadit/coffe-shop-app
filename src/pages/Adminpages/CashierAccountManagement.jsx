@@ -15,12 +15,6 @@ import { ModalCreateNewCashierAccount } from "./ModalCreateNewCashierAccount";
 import { ModalConfirmation } from "../../components/ModalConfirmation";
 import Sidebar from "../../components/Sidebar";
 import { SVGtrash } from "../../components/SVG/SVGtrash";
-// const ModalCreateNewCashierAccount = React.lazy(() =>
-//   import("./ModalCreateNewCashierAccount")
-// );
-// const ModalConfirmation = React.lazy(() =>
-//   import("../../components/ModalConfirmation")
-// );
 
 export const CashierAccountManagement = () => {
   const [cashier_account, setCashier_account] = useState([]);
@@ -97,7 +91,7 @@ export const CashierAccountManagement = () => {
 
   useEffect(() => {
     fetchCashierAccount();
-  }, []);
+  }, [userSelector]);
   return (
     <div>
       <Header />
@@ -107,7 +101,7 @@ export const CashierAccountManagement = () => {
         formik={formik}
       />
       <Row style={{ margin: "0" }}>
-        <Col xl={2} lg={2}>
+        <Col xl={2} lg={2} className="bg-cyan-300 position-sticky">
           <Sidebar />
         </Col>
         <Col>
@@ -119,8 +113,7 @@ export const CashierAccountManagement = () => {
                 </h4>
                 <span>
                   <Button
-                    className="d-xxs-smallfont"
-                    variant="warning"
+                    className="d-xxs-smallfont bg-cyan-300 text-dark"
                     onClick={() => setShowModal("ModalCreateNewCashierAccount")}
                   >
                     Add New Account
@@ -174,7 +167,7 @@ export const TableDataCashierAccount = ({
     await api
       .post("/users/update_isactive/" + account.id, data, {
         headers: {
-          "api-key": userSelector.username,
+          "api-key": userSelector?.username,
           Authorization: `Bearer ${localStorage.getItem("cs-token")}`,
         },
       })
@@ -195,14 +188,13 @@ export const TableDataCashierAccount = ({
           "delete-password": password,
         },
       })
+      .then(async () => {
+        await fetchCashierAccount();
+        toastSuccess("Success", `Success deleting ${account.username} account`);
+      })
       .catch((err) => {
         return toastError("failed", err?.response?.data);
       });
-    console.log(1);
-    await fetchCashierAccount();
-    console.log(2);
-    toastSuccess("Success", `Success deleting ${account.username} account`);
-    console.log(3);
   };
   return (
     <tr key={`tableRowAccount-${index}`}>
@@ -222,12 +214,14 @@ export const TableDataCashierAccount = ({
       <td className="d-xxs-none">{account.username}</td>
       <td>{account.fullname}</td>
       <td className="d-none d-sm-table-cell">{account.gender}</td>
-      <td
-        className={account.isActive ? "bg-success-subtle" : "bg-danger-subtle"}
-      >
+      <td className={account.isActive ? "bg-info-subtle" : "bg-danger-subtle"}>
         {account.isActive ? "Active" : "Disabled"}
         <Button
-          variant={account.isActive ? "danger" : "success"}
+          className={
+            account.isActive
+              ? "bg-danger-subtle text-dark border-danger-subtle"
+              : "bg-info-subtle text-dark border-info-subtle"
+          }
           style={{ float: "right" }}
           onClick={() => setShow("SETACTIVE")}
         >
@@ -240,7 +234,7 @@ export const TableDataCashierAccount = ({
           {account?.createdAt?.split("T")[1].slice(0, 8)}
         </span>
         <Button
-          variant="danger"
+          className="bg-danger-subtle text-dark border-danger-subtle"
           style={{ float: "right" }}
           onClick={() => setShow("DELETE")}
         >

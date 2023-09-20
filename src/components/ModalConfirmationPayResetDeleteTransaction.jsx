@@ -29,7 +29,7 @@ export const ModalConfirmationPayResetDeleteTransaction = ({
       </Modal.Body>
       <Modal.Footer>
         <Button
-          variant="primary"
+          className="bg-cyan-300 border-cyan-300 text-dark"
           onClick={() => {
             show === "RESET TRANSACTION" || show === "DELETE TRANSACTION"
               ? action()
@@ -41,7 +41,7 @@ export const ModalConfirmationPayResetDeleteTransaction = ({
         >
           YES
         </Button>
-        <Button variant="secondary" onClick={handleClose}>
+        <Button className="bg-secondary border-secondary" onClick={handleClose}>
           No
         </Button>
       </Modal.Footer>

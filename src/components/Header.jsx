@@ -31,6 +31,7 @@ export const Header = () => {
                 ? '/TheCoffeeSpace'
                 : null
             }
+            style={{ fontFamily: "sans-serif" }}
           >
             Home
           </Nav.Link>

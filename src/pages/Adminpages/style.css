@@ -2,6 +2,10 @@
   font-size: calc(8px + 0.5vw);
 }
 
+.card-cashier-page {
+  font-size: calc(8px + 1vw);
+}
+
 @media screen and (max-width: 340px) {
   .d-xxs-none {
     display: none;

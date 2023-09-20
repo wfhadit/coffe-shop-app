@@ -28,8 +28,8 @@ function Sidebar() {
           <a
             href='/account_management'
             className={
-              window.location.pathname === '/account_management'
-                ? 'bg-success-subtle '
+              window.location.pathname === "/account_management"
+                ? "bg-info-subtle"
                 : null
             }
           >
@@ -38,8 +38,8 @@ function Sidebar() {
           <a
             href='/dashboard'
             className={
-              window.location.pathname === '/dashboard'
-                ? 'bg-success-subtle '
+              window.location.pathname === "/dashboard"
+                ? "bg-info-subtle"
                 : null
             }
           >
@@ -48,8 +48,8 @@ function Sidebar() {
           <a
             href='/categories'
             className={
-              window.location.pathname === '/categories'
-                ? 'bg-success-subtle '
+              window.location.pathname === "/categories"
+                ? "bg-info-subtle"
                 : null
             }
           >

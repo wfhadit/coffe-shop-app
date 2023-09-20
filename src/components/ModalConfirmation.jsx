@@ -38,6 +38,7 @@ export const ModalConfirmation = ({ show, setShow, action, username }) => {
       <Modal.Footer>
         {!askPassword && show === "DELETE" ? (
           <Button
+            className="bg-cyan-300"
             onClick={() => {
               setAskPassword(true);
               toast({
@@ -53,7 +54,7 @@ export const ModalConfirmation = ({ show, setShow, action, username }) => {
           </Button>
         ) : (
           <Button
-            variant="primary"
+            className="bg-cyan-300"
             onClick={() => {
               show === "DELETE"
                 ? action(document.getElementById("userpasswordForm-1").value)
@@ -65,7 +66,10 @@ export const ModalConfirmation = ({ show, setShow, action, username }) => {
           </Button>
         )}
 
-        <Button variant="secondary" onClick={handleClose}>
+        <Button
+          className="bg-secondary-subtle outline-secondary-subtle"
+          onClick={handleClose}
+        >
           No
         </Button>
       </Modal.Footer>
