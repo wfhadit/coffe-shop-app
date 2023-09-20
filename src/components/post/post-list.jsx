@@ -16,6 +16,9 @@ export const PostList = ({ isOpen, onOpen, onClose }) => {
   const toast = useToast();
 
   const fetchSearch = async () => {
+    console.log('search', search);
+    console.log('sort', sort);
+    console.log('category', category);
     return api
       .get('/products/search', {
         params: {
@@ -26,7 +29,7 @@ export const PostList = ({ isOpen, onOpen, onClose }) => {
       })
       .then((res) => {
         setProducts(res.data.data);
-        console.log(res.data.data);
+        console.log('tesssss', res.data.data);
       })
       .catch((err) => console.log(err));
   };
@@ -46,12 +49,12 @@ export const PostList = ({ isOpen, onOpen, onClose }) => {
 
   const handleSortChange = (e) => {
     const value = e.target.value.split('-');
-    setSort({ orderBy: value[0], sortBy: value[1], categoryId: value[1] });
+    setSort({ orderBy: value[0], sortBy: value[1] });
   };
 
   const handleCategoryChange = (e) => {
     const selectedCategory = e.target.value;
-    setCategory(category);
+    setCategory(selectedCategory);
   };
 
   return (
@@ -91,9 +94,9 @@ export const PostList = ({ isOpen, onOpen, onClose }) => {
             <option className='' value=''>
               Category
             </option>
-            <option value='Coffee'>Coffee</option>
-            <option value='Non-Coffee'>Non-Coffee</option>
-            <option value='Pizza'>Pizza</option>
+            <option value='1'>Coffee</option>
+            <option value='2'>Non-Coffee</option>
+            <option value='3'>Pizza</option>
           </select>
         </div>
       </div>

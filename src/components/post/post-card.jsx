@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux';
 import { useDisclosure, useToast } from '@chakra-ui/react';
 import { ModalInputProduct } from './post-modal';
 
-
 export const PostCard = ({ product, fetchProducts }) => {
   const userSelector = useSelector((state) => state.auth);
   const disclosure = useDisclosure();
@@ -24,22 +23,24 @@ export const PostCard = ({ product, fetchProducts }) => {
   };
 
   const deleteProduct = (productId) => {
-    const token = localStorage.getItem("cs-token");
+    const token = localStorage.getItem('cs-token');
 
     const isConfirmed = window.confirm('Are you sure you want to delete this?');
-
     if (!isConfirmed) {
       return;
     }
 
     api
       .delete(`/products/${productId}`, {
-        params: { token, product_id: userSelector.id },
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('cs-token'),
+          'api-key': userSelector?.username,
+        },
       })
       .then(() => {
         toast({
-          title: "Product has been deleted",
-          status: "success",
+          title: 'Product has been deleted',
+          status: 'success',
           isClosable: true,
           position: 'top',
           duration: 3000,
@@ -56,11 +57,12 @@ export const PostCard = ({ product, fetchProducts }) => {
         });
       });
   };
+
   return (
     <>
       <tr
         key={product.id}
-        className='hover:bg-green-50 transform hover:scale-100 hover:shadow-md'
+        className='hover:bg-slate-300 transform hover:scale-105 hover:shadow-md'
       >
         <ModalInputProduct
           product={product}
