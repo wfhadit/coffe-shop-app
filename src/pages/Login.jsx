@@ -102,15 +102,17 @@ export const Login = () => {
           }}
         ></div>
 
-        <div className='w-full md:w-1/2 flex items-center justify-center bg-gradient-to-r from-sky-300 to-[#D3A774]'>
+        <div className='w-full md:w-1/2 flex items-center justify-center bg-gradient-to-r from-sky-50 to-[#D3A774]'>
           <Container>
             <Card className='rounded-lg p-4 items-center shadow-2xl'>
-              <h1 className='text-2xl text-center font-sans font-bold mb-4'>
-                Login
+              <h1 className='italic text-2xl text-center font-sans font-bold mb-4'>
+                Welcome
               </h1>
               <Form className='w-80'>
                 <Form.Group className='' controlId='UsernameLoginForm'>
-                  <Form.Label className='font-mono'>Username</Form.Label>
+                  <Form.Label className='font-sans font-semibold'>
+                    Username
+                  </Form.Label>
                   <Form.Control
                     type='text'
                     name='username'
@@ -121,7 +123,9 @@ export const Login = () => {
                   <div className='text-red-500'>{formik.errors.username}</div>
                 </Form.Group>
                 <Form.Group controlId='PasswordLoginForm'>
-                  <Form.Label className='font-mono'>Password</Form.Label>
+                  <Form.Label className='font-sans font-semibold'>
+                    Password
+                  </Form.Label>
                   <div className='relative'>
                     <Form.Control
                       type={seePassword ? 'text' : 'password'}
@@ -139,7 +143,7 @@ export const Login = () => {
                   <div className='text-red-500'>{formik.errors.password}</div>
                   <div className='text-center mt-4 w-80'>
                     <Button
-                      className='bg-sky-300 text-black font-serif w-full'
+                      className='bg-sky-300 text-black font-sans font-semibold w-full'
                       variant='light'
                       onClick={formik.handleSubmit}
                     >
