@@ -38,7 +38,7 @@ export const ModalConfirmation = ({ show, setShow, action, username }) => {
       <Modal.Footer>
         {!askPassword && show === "DELETE" ? (
           <Button
-            className="bg-cyan-300"
+            className="bg-[#D3A774]"
             onClick={() => {
               setAskPassword(true);
               toast({
@@ -54,7 +54,7 @@ export const ModalConfirmation = ({ show, setShow, action, username }) => {
           </Button>
         ) : (
           <Button
-            className="bg-cyan-300"
+            className="bg-[#D3A774]"
             onClick={() => {
               show === "DELETE"
                 ? action(document.getElementById("userpasswordForm-1").value)

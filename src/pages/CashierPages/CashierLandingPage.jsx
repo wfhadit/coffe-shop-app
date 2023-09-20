@@ -290,8 +290,8 @@ export const CashierLandingPage = () => {
               <Button
                 className={
                   searchCategory === 0
-                    ? "text-dark bg-primary py-0 px-3 card-cashier-page"
-                    : "text-dark bg-cyan-300 border-cyan-300 py-0 px-3 card-cashier-page"
+                    ? "text-dark bg-warning border-warning py-0 px-3 card-cashier-page"
+                    : "text-dark bg-[#D3A774] border-[#D3A774] py-0 px-3 card-cashier-page"
                 }
                 id={`category` + 0}
                 onClick={(e) => setSearchCategory(0)}
@@ -303,8 +303,8 @@ export const CashierLandingPage = () => {
                   key={`category-` + index}
                   className={
                     searchCategory === category.id
-                      ? "text-dark bg-primary py-0 px-1 card-cashier-page"
-                      : "text-dark bg-cyan-300 border-cyan-300 py-0 px-1 card-cashier-page"
+                      ? "text-dark bg-[#D3A888] py-0 px-1 card-cashier-page"
+                      : "text-dark bg-[#D3A774] border-[#D3A774] py-0 px-1 card-cashier-page"
                   }
                   id={`category` + category.id}
                   onClick={(e) =>
@@ -340,7 +340,7 @@ export const CashierLandingPage = () => {
           <Col lg={4} xs={6} className="col">
             {/* <Container> */}
             <Button
-              className="mb-2 d-xxs-smallfont bg-cyan-300 border-info-subtle text-dark"
+              className="mb-2 d-xxs-smallfont bg-[#D3A774] border-info-subtle text-dark"
               onClick={() => {
                 setShowTransaction(0);
                 setAnyTransaction({});
@@ -353,13 +353,13 @@ export const CashierLandingPage = () => {
                 className={
                   "" + anyTransaction?.Transaction_order_type?.order_type ===
                   "Dine In"
-                    ? "d-flex flex-wrap bg-info-subtle justify-content-between"
+                    ? "d-flex flex-wrap bg-warning-subtle justify-content-between"
                     : anyTransaction?.Transaction_order_type?.order_type ===
                       "Take Away"
-                    ? "d-flex flex-wrap bg-success-subtle justify-content-between"
+                    ? "d-flex flex-wrap bg-danger-subtle justify-content-between"
                     : anyTransaction?.Transaction_order_type?.order_type ===
                       "Catering"
-                    ? "d-flex flex-wrap bg-warning-subtle justify-content-between"
+                    ? "d-flex flex-wrap bg-warning justify-content-between"
                     : "d-flex flex-wrap justify-content-between"
                 }
               >
@@ -466,13 +466,14 @@ export const CashierLandingPage = () => {
                 <ListGroup.Item>
                   <ButtonGroup className="w-100">
                     <Button
-                      variant="info"
+                      variant="warning"
                       onClick={() => setShowModal("RESET TRANSACTION")}
-                      className="d-xxs-smallfont bg-cyan-300 border-info-subtle text-dark"
+                      className="d-xxs-smallfont bg-[#D3A774] border-info-subtle text-dark"
                     >
                       Reset
                     </Button>
                     <Button
+                      variant="warning"
                       onClick={
                         button
                           ? handleSave
@@ -485,12 +486,13 @@ export const CashierLandingPage = () => {
                                 duration: 2000,
                               })
                       }
-                      className="d-xxs-smallfont bg-cyan-300 border-info-subtle text-dark"
+                      className="d-xxs-smallfont bg-[#D3A774] border-info-subtle text-dark"
                     >
                       Save
                     </Button>
                     <Button
-                      className="d-xxs-smallfont bg-cyan-300 border-info-subtle text-dark"
+                      variant="warning"
+                      className="d-xxs-smallfont bg-[#D3A774] border-info-subtle text-dark"
                       onClick={() => setShowModal("PAY")}
                     >
                       Pay
@@ -504,8 +506,8 @@ export const CashierLandingPage = () => {
         ) : (
           <Col xl={2} lg={3} xs={4} className="col">
             <Button
-              className="position-relative w-100 bg-cyan-300 border-info-subtle text-dark"
-              variant="info"
+              className="position-relative w-100 bg-[#D3A774] border-[#D3A774] text-dark"
+              variant="warning"
               onClick={() => setNewTransaction(!newTransaction)}
             >
               New Transaction
@@ -513,7 +515,7 @@ export const CashierLandingPage = () => {
             {newTransaction ? (
               <div className="d-flex flex-column gap-2 my-2">
                 <Button
-                  variant="text-dark bg-info-subtle border-info-subtle"
+                  variant="text-dark bg-warning-subtle border-[#D3A774]"
                   onClick={() => createNewTransaction(1)}
                 >
                   Dine In
@@ -521,13 +523,13 @@ export const CashierLandingPage = () => {
                 <Button
                   onClick={() => createNewTransaction(2)}
                   variant="success"
-                  className="text-dark bg-success-subtle border-success-subtle"
+                  className="text-dark bg-danger-subtle border-[#D3A774]"
                 >
                   Take Away
                 </Button>
                 <Button
                   variant="warning"
-                  className="bg-warning-subtle border-warning-subtle"
+                  className="bg-warning border-[#D3A774]"
                   onClick={() => createNewTransaction(3)}
                 >
                   Cathering
@@ -559,11 +561,11 @@ export const CashierLandingPage = () => {
                       <div
                         className={`d-flex py-1 px-2 justify-content-center rounded-pill gap-1 w-100 ${
                           val.order_type === 1
-                            ? "bg-info-subtle"
-                            : val.order_type === 2
-                            ? "bg-success-subtle"
-                            : val.order_type === 3
                             ? "bg-warning-subtle"
+                            : val.order_type === 2
+                            ? "bg-danger-subtle"
+                            : val.order_type === 3
+                            ? "bg-warning"
                             : null
                         }`}
                         type="button"

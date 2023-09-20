@@ -29,7 +29,7 @@ export const ModalConfirmationPayResetDeleteTransaction = ({
       </Modal.Body>
       <Modal.Footer>
         <Button
-          className="bg-cyan-300 border-cyan-300 text-dark"
+          className="bg-[#D3A774] border-[#D3A774] text-dark"
           onClick={() => {
             show === "RESET TRANSACTION" || show === "DELETE TRANSACTION"
               ? action()
