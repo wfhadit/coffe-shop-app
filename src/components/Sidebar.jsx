@@ -56,6 +56,16 @@ function Sidebar() {
             Categories
           </a>
           <a
+
+            href="/dailysales/any"
+            className={
+              window.location.pathname === "/dailysales"
+                ? "bg-info-subtle"
+                : null
+            }
+          >
+            Daily Sales
+
             href='/report'
             className={
               window.location.pathname === '/report'
@@ -64,6 +74,7 @@ function Sidebar() {
             }
           >
             Report
+
           </a>
         </Offcanvas.Body>
       </Offcanvas>
