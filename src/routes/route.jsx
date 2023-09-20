@@ -46,7 +46,7 @@ export const routes = [
     )
   ),
   new RouteClass(
-    "/dashboard",
+    "/products",
 
     (
       <ProtectedPage needLogin={true} AdminOnly={true}>

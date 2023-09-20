@@ -1,10 +1,10 @@
-import { Container, Row, Col } from "react-bootstrap";
-import { Header } from "../../components/Header";
-import { Flex, useDisclosure, Center } from "@chakra-ui/react";
-import add50 from "../../assets/icons8-plus.svg";
+import { Container, Row, Col } from 'react-bootstrap';
+import { Header } from '../../components/Header';
+import { Flex, useDisclosure, Center } from '@chakra-ui/react';
+import add50 from '../../assets/icons8-plus.svg';
 
-import Sidebar from "../../components/Sidebar";
-import { PostList } from "../../components/post/post-list";
+import Sidebar from '../../components/Sidebar';
+import { PostList } from '../../components/post/post-list';
 
 export const AdminLandingPage = ({ search }) => {
   const discloosure = useDisclosure();
@@ -13,14 +13,14 @@ export const AdminLandingPage = ({ search }) => {
     <>
       <Header />
       <Row style={{ margin: '0' }}>
-        <Col xl={2} lg={2}>
+        <Col xl={2} lg={2} className='bg-[#D3A774] h-screen'>
           <Sidebar />
         </Col>
         <Col>
           <Container>
-            <Center alignItems={"flex-start"} marginTop={"35px"}>
+            <Center alignItems={'flex-start'} marginTop={'35px'}>
               <PostList {...discloosure} />
-              <Flex justifyContent={"right"} bgColor={"blue"}>
+              <Flex justifyContent={'right'} bgColor={'blue'}>
                 <img
                   src={add50}
                   alt=''
