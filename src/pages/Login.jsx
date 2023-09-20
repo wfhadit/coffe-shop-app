@@ -87,8 +87,11 @@ export const Login = () => {
   }, [userSelector.role]);
 
   return (
-    <div>
-      <div class="bg-gray-800 text-white py-2 overflow-hidden animate-bounce">
+    <div className="vh-100">
+      <div
+        class="bg-gray-800 text-white py-2 overflow-hidden animate-bounce"
+        style={{ height: "5vh" }}
+      >
         <div class="marquee text-lg font-mono">MINI PROJECT 3 | POS</div>
       </div>
 
@@ -97,12 +100,15 @@ export const Login = () => {
           className="hidden md:block w-5/6 bg-cover bg-center"
           style={{
             backgroundImage: `url(${loginBackgroundImage})`,
-            height: "100vh",
+            height: "95vh",
             opacity: "0.8",
           }}
         ></div>
 
-        <div className="w-full md:w-1/2 flex items-center justify-center bg-gradient-to-r from-sky-50 to-[#D3A774] vh-100">
+        <div
+          className="w-full md:w-1/2 flex items-center justify-center bg-gradient-to-r from-sky-50 to-[#D3A774]"
+          style={{ height: "95vh" }}
+        >
           <Container className="w-100 d-flex justify-content-center">
             <Card
               className="rounded-lg p-4 items-center shadow-2xl bg-transparent border-none"
