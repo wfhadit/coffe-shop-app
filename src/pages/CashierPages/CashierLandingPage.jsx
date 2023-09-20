@@ -61,6 +61,9 @@ export const CashierLandingPage = () => {
       });
       setOutstandingTransaction(data.rows);
       setTotalOutstandingTransaction(data.count);
+      socketConnection.on(`NEW_TRANSACTION`, (newTransaction) => {
+        fetchOutstandingTransaction();
+      });
     } catch (err) {
       console.log(err);
     }
@@ -107,7 +110,7 @@ export const CashierLandingPage = () => {
         }
       )
       .then((res) => {
-        // fetchOutstandingTransaction();
+        fetchOutstandingTransaction();
       })
       .catch((err) => console.log(err));
 
@@ -122,6 +125,8 @@ export const CashierLandingPage = () => {
           "api-key": userSelector?.username,
         },
       });
+      fetchOutstandingTransaction();
+      fetchProducts();
     } catch (err) {
       console.log(err);
       if (typeof err?.response?.data === "string")
@@ -143,24 +148,6 @@ export const CashierLandingPage = () => {
       }
     }
   };
-
-  useEffect(() => {
-    fetchAnyTransaction(showTransaction);
-    fetchProducts();
-  }, [showTransaction]);
-
-  useEffect(() => {
-    fetchProducts();
-    fetchCategories();
-    fetchOutstandingTransaction();
-    socketConnection.on(`NEW_TRANSACTION`, (newTransaction) => {
-      fetchOutstandingTransaction();
-    });
-
-    return () => {
-      socketConnection.disconnect();
-    };
-  }, []);
 
   const handleReset = async () => {
     const temp = { ...anyTransaction };
@@ -272,6 +259,21 @@ export const CashierLandingPage = () => {
     fetchOutstandingTransaction();
   };
 
+  useEffect(() => {
+    fetchAnyTransaction(showTransaction);
+    fetchProducts();
+  }, [showTransaction]);
+
+  useEffect(() => {
+    fetchProducts();
+    fetchCategories();
+    fetchOutstandingTransaction();
+
+    return () => {
+      socketConnection.disconnect();
+    };
+  }, []);
+
   return (
     <div>
       <Header />
@@ -366,11 +368,11 @@ export const CashierLandingPage = () => {
                   setAnyTransaction={setAnyTransaction}
                   handleChangeTransaction={handleChangeTransaction}
                 />
-                <span className="border border-secondary rounded px-1">
+                <span className="border border-secondary rounded px-1 td-cashier-page">
                   Order No. {anyTransaction?.id}
                 </span>
                 <span
-                  className="border border-secondary rounded px-1 d-flex align-items-center gap-2"
+                  className="border border-secondary rounded px-1 d-flex align-items-center gap-2 td-cashier-page"
                   onClick={() => setModalEditTransaction(true)}
                   type="button"
                 >
@@ -378,7 +380,7 @@ export const CashierLandingPage = () => {
                   <SVGdown />
                 </span>
                 <span
-                  className="border border-secondary rounded px-1 d-flex align-items-center gap-2"
+                  className="border border-secondary rounded px-1 d-flex align-items-center gap-2 td-cashier-page"
                   onClick={() => setModalEditTransaction(true)}
                   type="button"
                 >
