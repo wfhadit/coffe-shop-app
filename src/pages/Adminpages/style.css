@@ -82,4 +82,13 @@
   .col.col-lg-3.col-4 {
     margin-left: 4px !important;
   }
+
+  .hidden-md {
+    height: 0px;
+  }
+
+  .btn-close {
+    color: white;
+    background-color: black;
+  }
 }
