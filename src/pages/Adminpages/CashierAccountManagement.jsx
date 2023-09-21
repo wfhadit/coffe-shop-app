@@ -1,4 +1,4 @@
-import { Button, Col, Container, Row, Table } from "react-bootstrap";
+import { Button, Col, Container, Row, Spinner, Table } from "react-bootstrap";
 import { Header } from "../../components/Header";
 import "./style.css";
 import { api } from "../../API/api";
@@ -22,6 +22,8 @@ export const CashierAccountManagement = () => {
   const [showModal, setShowModal] = useState("");
   const userSelector = useSelector((state) => state.auth);
   const [page, setPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchName, setSearchName] = useState("");
   const toastSuccess = (title = "success", description = "") =>
     toast({
       title: title,
@@ -40,10 +42,10 @@ export const CashierAccountManagement = () => {
       status: "error",
       description: description,
     });
-  const fetchCashierAccount = async (page = 1) => {
+  const fetchCashierAccount = async (page = 1, searchName = "") => {
     try {
       const { data } = await api.get(
-        `/users/cashier_account?role=2&page=${page}`,
+        `/users/cashier_account?role=2&page=${page}&username=${searchName}`,
         {
           headers: {
             "api-key": userSelector.username,
@@ -94,10 +96,17 @@ export const CashierAccountManagement = () => {
       }
     },
   });
+  useEffect(() => {
+    fetchCashierAccount(currentPage, searchName);
+  }, [currentPage]);
 
   useEffect(() => {
-    fetchCashierAccount();
-  }, [userSelector]);
+    const search = setTimeout(() => {
+      fetchCashierAccount(currentPage, searchName);
+    }, 500);
+
+    return () => clearTimeout(search);
+  }, [searchName]);
   return (
     <div>
       <Header />
@@ -127,7 +136,26 @@ export const CashierAccountManagement = () => {
                   </Button>
                 </span>
               </span>
-
+              <form className="mb-2">
+                <label className="mr-2">Search anyname:</label>
+                <input
+                  type="text"
+                  id="searchNameAccount"
+                  placeholder="username or fullname"
+                  onChange={(e) => {
+                    setSearchName(e.target.value);
+                    setCurrentPage(1);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") e.preventDefault();
+                  }}
+                  style={{
+                    border: "1px solid black",
+                    borderRadius: "10px",
+                    padding: "1px 8px",
+                  }}
+                />
+              </form>
               <Table striped bordered hover>
                 <thead>
                   <tr>
@@ -140,7 +168,7 @@ export const CashierAccountManagement = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {cashier_account.length &&
+                  {cashier_account.length ? (
                     cashier_account.map((account, index) => (
                       <TableDataCashierAccount
                         account={account}
@@ -149,7 +177,12 @@ export const CashierAccountManagement = () => {
                         toastError={toastError}
                         toastSuccess={toastSuccess}
                       />
-                    ))}
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={6} className="text-center"></td>
+                    </tr>
+                  )}
                 </tbody>
               </Table>
             </div>
@@ -159,8 +192,14 @@ export const CashierAccountManagement = () => {
                     <Button
                       variant="warning"
                       key={`buttonAccountManagement-` + index}
-                      onClick={() => fetchCashierAccount(index + 1)}
-                      className="bg-[#D3A774]"
+                      onClick={() => {
+                        setCurrentPage(index + 1);
+                      }}
+                      className={
+                        currentPage === index + 1
+                          ? "bg-warning"
+                          : "bg-[#D3A774]"
+                      }
                     >
                       {index + 1}
                     </Button>
