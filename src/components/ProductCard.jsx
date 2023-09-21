@@ -170,7 +170,7 @@ export const ProductCardCashier = ({
           </div>
         ) : null}
         <Card.Title
-          className="card-cashier-page text-center position-absolute bottom-0 w-100 mb-0 bg-cyan-300"
+          className="card-cashier-page text-center position-absolute bottom-0 w-100 mb-0 bg-[#D3A774]"
           style={{
             textTransform: "capitalize",
             maxHeight: "48px",

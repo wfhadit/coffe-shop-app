@@ -106,8 +106,8 @@ export const ModalInputProduct = ({
             formData,
             {
               headers: {
-                Authorization: 'Bearer ' + localStorage.getItem('cs-token'),
-                'api-key': userSelector?.username,
+                Authorization: "Bearer " + localStorage.getItem("cs-token"),
+                "api-key": userSelector?.username,
               },
             }
           );
@@ -123,8 +123,8 @@ export const ModalInputProduct = ({
         } else {
           const response = await api.post("/products", formData, {
             headers: {
-              Authorization: 'Bearer ' + localStorage.getItem('cs-token'),
-              'api-key': userSelector?.username,
+              Authorization: "Bearer " + localStorage.getItem("cs-token"),
+              "api-key": userSelector?.username,
             },
           });
           toast({
@@ -208,18 +208,6 @@ export const ModalInputProduct = ({
                 }
               >
                 <FormLabel>Category</FormLabel>
-                {/* <Select
-                  name="categoryId"
-                  value={formik.values.categoryId}
-                  onChange={formik.handleChange("categoryId")}
-                  placeholder="Choose Category"
-                >
-                  {categoryOption.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </Select> */}
                 <OptionList
                   categories={[...categories]}
                   fetchCategories={fetchCategories}

@@ -6,6 +6,7 @@ import { Login } from "../pages/Login";
 import { Redirect } from "../pages/Redirect";
 import { ProtectedPage } from "./ProtectedPage";
 import { CategoriesPage } from "../pages/Adminpages/CategoriesPage";
+import { DailySales } from "../pages/Adminpages/DailySales";
 
 class RouteClass {
   constructor(path = "", element) {
@@ -63,12 +64,22 @@ export const routes = [
       </ProtectedPage>
     )
   ),
-  // new RouteClass(
-  //   "/categories",
-  //   (
-  //     <ProtectedPage needLogin={true} AdminOnly={true}>
-  //       <CategoriesPage />
-  //     </ProtectedPage>
-  //   )
-  // ),
+
+  new RouteClass(
+    "/categories",
+    (
+      <ProtectedPage needLogin={true} AdminOnly={true}>
+        <CategoriesPage />
+      </ProtectedPage>
+    )
+  ),
+  new RouteClass(
+    "/dailysales/:params",
+    (
+      <ProtectedPage needLogin={true} AdminOnly={true}>
+        <DailySales />
+      </ProtectedPage>
+    )
+  ),
+
 ];
