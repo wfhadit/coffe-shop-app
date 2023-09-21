@@ -44,11 +44,11 @@ export const CategoriesPage = () => {
     <>
       <Header />
       <Row style={{ margin: "0" }}>
-        <Col xl={2} lg={2} className="bg-cyan-300 vh-100">
+        <Col xl={2} lg={2}>
           <Sidebar />
         </Col>
         <Col>
-          <Container alignItems={"flex-start"} marginTop={"35px"}>
+          <Container>
             <Flex justifyContent={"right"}>
               <Button colorScheme="blue" onClick={onOpen}>
                 Add Category

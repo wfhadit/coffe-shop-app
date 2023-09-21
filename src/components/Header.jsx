@@ -29,7 +29,9 @@ export const Header = () => {
           <Nav.Link
             href={
               userSelector?.id === 1
-                ? "/dashboard"
+
+                ? "/account_management"
+
                 : userSelector?.id === 2
                 ? "/TheCoffeeSpace"
                 : null
@@ -37,12 +39,6 @@ export const Header = () => {
             className="font-sans font-bold text-black"
           >
             Home
-          </Nav.Link>
-          <Nav.Link
-            className="font-sans font-bold text-black"
-            href="/transactions"
-          >
-            Transactions
           </Nav.Link>
           {userSelector.id === 1 ? (
             <NavDropdown
@@ -56,18 +52,30 @@ export const Header = () => {
               >
                 Cashier Account Management
               </NavDropdown.Item>
+              <NavDropdown.Item href="/products" className="d-xxs-smallfont">
+                Products
+              </NavDropdown.Item>
+              <NavDropdown.Item href="/categories" className="d-xxs-smallfont">
+                Categories
+              </NavDropdown.Item>
               <NavDropdown.Item
-                href="/daily_report"
+
+                href="/dailysales/any"
+
                 className="d-xxs-smallfont"
               >
-                Daily Report
+                Daily Sales
               </NavDropdown.Item>
-              <NavDropdown.Item href="/dashboard" className="d-xxs-smallfont">
-                Dashboard
+
+              <NavDropdown.Item href="/report" className="d-xxs-smallfont">
+                Report
               </NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.4" className="d-xxs-smallfont">
-                Separated link
+              <NavDropdown.Item
+                href="/TheCoffeeSpace"
+                className="d-xxs-smallfont"
+              >
+                CashierPage
+
               </NavDropdown.Item>
             </NavDropdown>
           ) : null}

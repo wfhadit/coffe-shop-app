@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { api } from "../../API/api";
 import { DailySalesList } from "../../components/dailysales";
 import { useParams, useSearchParams } from "react-router-dom";
+import { Center } from "@chakra-ui/layout";
 
 export const DailySales = () => {
   const [transactions, setTransactions] = useState([]);
@@ -50,20 +51,23 @@ export const DailySales = () => {
           <Sidebar />
         </Col>
         <Col>
-          <Container alignItems={"flex-start"} marginTop={"35px"}>
+          <Container>
             <DailySalesList
               transactions={[...transactions]}
               handleInputForQueryString={handleInputForQueryString}
             />
-            {page > 1 &&
-              [...new Array(page)].map((val, index) => (
-                <Button
-                  onClick={() => handleInputForQueryString(index + 1)}
-                  id={`button-pagination-daily-sales` + (index + 1)}
-                >
-                  {index + 1}
-                </Button>
-              ))}
+            <Center>
+              {page > 1 &&
+                [...new Array(page)].map((val, index) => (
+                  <Button
+                    className="bg-[#D3A774] border-warning mx-1"
+                    onClick={() => handleInputForQueryString(index + 1)}
+                    id={`button-pagination-daily-sales` + (index + 1)}
+                  >
+                    {index + 1}
+                  </Button>
+                ))}
+            </Center>
           </Container>
         </Col>
       </Row>
