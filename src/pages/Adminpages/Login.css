@@ -11,3 +11,9 @@
     transform: translateX(100%);
   }
 }
+
+/* @media (max-width: 767px) {
+  .bg-gradient-to-r {
+    background: none;
+  }
+} */

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Button, Card, Container, Form } from 'react-bootstrap';
 import loginBackgroundImage from '../assets/bgggg.png';
-import { SVGeye, SVGslashedEye } from '../components/SVG/SVGeye';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
@@ -88,13 +87,13 @@ export const Login = () => {
 
   return (
     <div>
-      <div class='bg-gray-800 text-white py-2 overflow-hidden animate-bounce'>
-        <div class='marquee text-lg font-mono'>MINI PROJECT 3 | POS</div>
+      <div className='bg-gray-800 text-white py-2 overflow-hidden animate-bounce'>
+        <div className='marquee text-lg font-mono'>MINI PROJECT 3 | POS</div>
       </div>
 
-      <div className='flex'>
+      <div className='flex flex-col-reverse md:flex-row'>
         <div
-          className='hidden md:block w-1/2 bg-cover bg-center'
+          className='md:w-1/2 bg-cover bg-center'
           style={{
             backgroundImage: `url(${loginBackgroundImage})`,
             height: '100vh',
@@ -102,13 +101,13 @@ export const Login = () => {
           }}
         ></div>
 
-        <div className='w-full md:w-1/2 flex items-center justify-center bg-gradient-to-r from-sky-50 to-[#D3A774]'>
-          <Container>
-            <Card className='rounded-lg p-4 items-center shadow-2xl'>
-              <h1 className='italic text-2xl text-center font-sans font-bold mb-4'>
+        <div className='w-full md:w-1/2 flex items-center justify-end pl-4 pr-4 bg-gradient-to-r from-sky-50 to-[#D3A774]'>
+          <Container className='px-32'>
+            <Card className='rounded-2xl p-4 items-center shadow-2xl max-w-md bg-transparent border-none'>
+              <h1 className=' italic text-2xl text-center font-sans font-bold mb-4'>
                 Welcome
               </h1>
-              <Form className='w-80'>
+              <Form className='w-full'>
                 <Form.Group className='' controlId='UsernameLoginForm'>
                   <Form.Label className='font-sans font-semibold'>
                     Username
@@ -141,7 +140,7 @@ export const Login = () => {
                     </span>
                   </div>
                   <div className='text-red-500'>{formik.errors.password}</div>
-                  <div className='text-center mt-4 w-80'>
+                  <div className='text-center mt-4'>
                     <Button
                       className='bg-sky-300 text-black font-sans font-semibold w-full'
                       variant='light'

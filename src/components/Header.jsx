@@ -15,8 +15,7 @@ export const Header = () => {
     window.location.reload();
   };
   return (
-    <Navbar expand='lg' className='bg-[#D3A774]'>
-      {/* <Container> */}
+    <Navbar expand='lg' className='py-3 bg-[#D3A774]'>
       <Navbar.Brand
         href='/TheCoffeeSpace'
         className='font-sans font-bold px-10 underline'
@@ -76,7 +75,6 @@ export const Header = () => {
           <SVGLogOut />
         </div>
       </Navbar.Collapse>
-      {/* </Container> */}
     </Navbar>
   );
 };

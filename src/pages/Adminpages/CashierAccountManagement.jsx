@@ -101,7 +101,7 @@ export const CashierAccountManagement = () => {
         formik={formik}
       />
       <Row style={{ margin: '0' }}>
-        <Col xl={2} lg={2} className='bg-[#D3A774] position-sticky h-screen'>
+        <Col xl={2} lg={2} className='bg-[#D3A774] position-sticky h-100vh'>
           <Sidebar />
         </Col>
         <Col>

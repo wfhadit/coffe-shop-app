@@ -10,7 +10,7 @@ function Sidebar() {
   const handleShow = () => setShow(true);
 
   return (
-    <>
+    <div style={{ position: 'sticky', top: '5vh' }}>
       <Button variant='secondary' className='d-lg-none' onClick={handleShow}>
         Menu
       </Button>
@@ -67,7 +67,7 @@ function Sidebar() {
           </a>
         </Offcanvas.Body>
       </Offcanvas>
-    </>
+    </div>
   );
 }
 
