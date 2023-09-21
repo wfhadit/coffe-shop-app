@@ -11,7 +11,11 @@ function Sidebar() {
 
   return (
     <>
-      <Button variant="secondary" className="d-lg-none" onClick={handleShow}>
+      <Button
+        variant="warning"
+        className="d-lg-none bg-[#D3A774]"
+        onClick={handleShow}
+      >
         Menu
       </Button>
 
