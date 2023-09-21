@@ -55,7 +55,7 @@ export const SalesReportPage = () => {
     <>
       <Header />
       <div className='flex flex-row'>
-        <div className='bg-[#D3A774] px-2 w-60 h-screen'>
+        <div className='bg-[#D3A774] px-2 w-60 ' style={{ minHeight: '95vh' }}>
           <Sidebar />
         </div>
         <div className='flex-grow ml-4'>

@@ -12,8 +12,18 @@ export const PostList = ({ isOpen, onOpen, onClose }) => {
   const [sort, setSort] = useState({ orderBy: '', sortBy: '', categoryId: '' });
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('');
+  const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
   const toast = useToast();
+
+  const fetchCategories = async () => {
+    try {
+      const { data } = await api.get('/category');
+      setCategories(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const fetchSearch = async () => {
     console.log('search', search);
@@ -57,16 +67,20 @@ export const PostList = ({ isOpen, onOpen, onClose }) => {
     setCategory(selectedCategory);
   };
 
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
   return (
     <div>
-      <div className='flex relative '>
-        <div className=' absolute left-3 top-3'>
-          <Search2Icon className='d-none d-sm-table-cell w-5 h-5 mb-2  text-gray-400' />
+      <div className='flex relative'>
+        <div className='absolute left-3 top-3'>
+          <Search2Icon className='w-5 h-5 mb-2  text-gray-400' />
         </div>
         <input
           type='text'
           placeholder='Search for products...'
-          className='d-none d-sm-table-cell border rounded-lg pl-12 mr-2 text-left border-none outline-none'
+          className='border rounded-lg pl-12 mr-2 text-left border-none outline-none'
           onChange={(e) => doSearch(e.target.value)}
         />
         <div className='px-2 py-2 border rounded-lg mr-2'>
@@ -84,7 +98,7 @@ export const PostList = ({ isOpen, onOpen, onClose }) => {
             <option value='price-desc'>Price Z-A</option>
           </select>
         </div>
-        <div className='px-2 py-2 border rounded-lg d-none d-sm-table-cell'>
+        <div className='px-2 py-2 border rounded-lg'>
           <select
             className='border-none outline-none cursor-pointer'
             defaultValue={''}
@@ -94,9 +108,11 @@ export const PostList = ({ isOpen, onOpen, onClose }) => {
             <option className='' value=''>
               Category
             </option>
-            <option value='11'>Coffee</option>
-            <option value='2'>Non-Coffee</option>
-            <option value='3'>Pizza</option>
+            {categories?.map((category, idx) => (
+              <option value={category.id} key={`category` + idx}>
+                {category.category_name}
+              </option>
+            ))}
           </select>
         </div>
       </div>
@@ -106,19 +122,13 @@ export const PostList = ({ isOpen, onOpen, onClose }) => {
             <th className='px-4 py-2 '>ID</th>
             <th className='px-4 py-2 '>Image</th>
             <th className='px-4 py-2 '>Product</th>
-            {window.innerWidth > 320 && (
-              <>
-                <th className='px-4 py-2 d-none d-sm-table-cell'>Category</th>
-                <th className='px-4 py-2 d-none d-sm-table-cell'>Price</th>
-                <th className='px-4 py-2 d-none d-sm-table-cell'>Stock</th>
-                <th className='px-4 py-2 d-none d-sm-table-cell'>
-                  Description
-                </th>
-                <th className='px-4 py-2 d-none d-sm-table-cell' colSpan=''>
-                  Action
-                </th>
-              </>
-            )}
+            <th className='px-4 py-2 '>Category</th>
+            <th className='px-4 py-2 '>Price</th>
+            <th className='px-4 py-2 '>Stock</th>
+            <th className='px-4 py-2 '>Description</th>
+            <th className='px-4 py-2 ' colSpan='2'>
+              Action
+            </th>
           </tr>
         </thead>
         <tbody>
