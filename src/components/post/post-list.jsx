@@ -75,12 +75,12 @@ export const PostList = ({ isOpen, onOpen, onClose }) => {
     <div>
       <div className='flex relative'>
         <div className='absolute left-3 top-3'>
-          <Search2Icon className='w-5 h-5 mb-2  text-gray-400' />
+          <Search2Icon className='d-none d-sm-table-cell w-5 h-5 mb-2  text-gray-400' />
         </div>
         <input
           type='text'
           placeholder='Search for products...'
-          className='border rounded-lg pl-12 mr-2 text-left border-none outline-none'
+          className='d-none d-sm-table-cell border rounded-lg pl-12 mr-2 text-left border-none outline-none'
           onChange={(e) => doSearch(e.target.value)}
         />
         <div className='px-2 py-2 border rounded-lg mr-2'>
@@ -98,9 +98,9 @@ export const PostList = ({ isOpen, onOpen, onClose }) => {
             <option value='price-desc'>Price Z-A</option>
           </select>
         </div>
-        <div className='px-2 py-2 border rounded-lg'>
+        <div className='d-none d-sm-table-cell px-2 py-2 border rounded-lg'>
           <select
-            className='border-none outline-none cursor-pointer'
+            className='d-none d-sm-table-cell border-none outline-none cursor-pointer'
             defaultValue={''}
             onChange={handleCategoryChange}
             style={{ cursor: 'pointer' }}
@@ -122,11 +122,11 @@ export const PostList = ({ isOpen, onOpen, onClose }) => {
             <th className='px-4 py-2 '>ID</th>
             <th className='px-4 py-2 '>Image</th>
             <th className='px-4 py-2 '>Product</th>
-            <th className='px-4 py-2 '>Category</th>
-            <th className='px-4 py-2 '>Price</th>
-            <th className='px-4 py-2 '>Stock</th>
-            <th className='px-4 py-2 '>Description</th>
-            <th className='px-4 py-2 ' colSpan='2'>
+            <th className='px-4 py-2 d-none d-sm-table-cell'>Category</th>
+            <th className='px-4 py-2 d-none d-sm-table-cell'>Price</th>
+            <th className='px-4 py-2 d-none d-sm-table-cell'>Stock</th>
+            <th className='px-4 py-2 d-none d-sm-table-cell'>Description</th>
+            <th className='px-4 py-2 d-none d-sm-table-cell' colSpan='2'>
               Action
             </th>
           </tr>

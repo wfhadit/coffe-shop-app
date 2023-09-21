@@ -15,11 +15,7 @@ export const Header = () => {
     window.location.reload();
   };
   return (
-    <Navbar
-      expand='lg'
-      style={{ height: '5vh' }}
-      className='sticky top-0 z-10 py-3 bg-[#D3A774]'
-    >
+    <Navbar expand='lg' style={{ height: '5vh' }} className='py-3 bg-[#D3A774]'>
       <Navbar.Brand
         href='/TheCoffeeSpace'
         className='font-sans font-bold px-10 underline'

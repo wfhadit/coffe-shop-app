@@ -69,38 +69,35 @@ export const PostCard = ({ product, fetchProducts }) => {
           />
         </td>
         <td className='border px-4 py-2'>{product.productName}</td>
-        {window.innerWidth > 320 && (
-          <>
-            <td className='border px-4 py-2 d-none d-sm-table-cell'>
-              {product.Category.category_name}
-            </td>
-            <td className='border px-4 py-2 d-none d-sm-table-cell'>
-              Rp. {product.price}
-            </td>
-            <td className='border px-4 py-2 d-none d-sm-table-cell'>
-              {product.stock}
-            </td>
-            <td className='border px-4 py-2 d-none d-sm-table-cell'>
-              {product.desc}
-            </td>
-            <td className='border px-4 py-2'>
-              <EditIcon
-                className='d-none d-sm-table-cell'
-                boxSize={5}
-                cursor={'pointer'}
-                onClick={() => disclosure.onOpen()}
-              />
-            </td>
-            <td className='d-none d-sm-table-cell border px-4 py-2'>
-              <DeleteIcon
-                color={'red.500'}
-                boxSize={5}
-                cursor={'pointer'}
-                onClick={() => deleteProduct(product.id)}
-              />
-            </td>
-          </>
-        )}
+
+        <td className='border px-4 py-2 d-none d-sm-table-cell'>
+          {product.Category.category_name}
+        </td>
+        <td className='border px-4 py-2 d-none d-sm-table-cell'>
+          Rp. {product.price}
+        </td>
+        <td className='border px-4 py-2 d-none d-sm-table-cell'>
+          {product.stock}
+        </td>
+        <td className='border px-4 py-2 d-none d-sm-table-cell'>
+          {product.desc}
+        </td>
+        <td className='border px-4 py-2'>
+          <EditIcon
+            className='d-none d-sm-table-cell'
+            boxSize={5}
+            cursor={'pointer'}
+            onClick={() => disclosure.onOpen()}
+          />
+        </td>
+        <td className='d-none d-sm-table-cell border px-4 py-2'>
+          <DeleteIcon
+            color={'red.500'}
+            boxSize={5}
+            cursor={'pointer'}
+            onClick={() => deleteProduct(product.id)}
+          />
+        </td>
       </tr>
     </>
   );
