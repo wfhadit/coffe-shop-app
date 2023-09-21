@@ -29,7 +29,9 @@ export const Header = () => {
           <Nav.Link
             href={
               userSelector?.id === 1
+
                 ? "/account_management"
+
                 : userSelector?.id === 2
                 ? "/TheCoffeeSpace"
                 : null
@@ -57,11 +59,14 @@ export const Header = () => {
                 Categories
               </NavDropdown.Item>
               <NavDropdown.Item
+
                 href="/dailysales/any"
+
                 className="d-xxs-smallfont"
               >
                 Daily Sales
               </NavDropdown.Item>
+
               <NavDropdown.Item href="/report" className="d-xxs-smallfont">
                 Report
               </NavDropdown.Item>
@@ -70,6 +75,7 @@ export const Header = () => {
                 className="d-xxs-smallfont"
               >
                 CashierPage
+
               </NavDropdown.Item>
             </NavDropdown>
           ) : null}
