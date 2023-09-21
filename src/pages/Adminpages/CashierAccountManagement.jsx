@@ -100,8 +100,11 @@ export const CashierAccountManagement = () => {
         setShowModal={setShowModal}
         formik={formik}
       />
+  
+
       <Row style={{ margin: "0" }}>
         <Col xl={2} lg={2}>
+
           <Sidebar />
         </Col>
         <Col>

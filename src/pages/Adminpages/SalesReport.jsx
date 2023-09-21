@@ -7,53 +7,49 @@ import { useSelector } from 'react-redux';
 
 export const SalesReportPage = () => {
   const userSelector = useSelector((state) => state.auth);
-  const [createdAt, setcreatedAt] = useState('');
-  const [updatedAt, setUpdatedAt] = useState('');
-  const [reportData, setReportData] = useState([]);
+  const [totalByDate, setTotalByDate] = useState([]);
+  const [dateAxis, setDateAxis] = useState([]);
 
-  const handleCreatedAt = (e) => {
-    setcreatedAt(e.target.value);
+  const handleQueryDate = () => {
+    const datefrom = document.getElementById('datefrom-report-graphic').value;
+    const dateto = document.getElementById('dateto-report-graphic').value;
+    fetchReport(datefrom, dateto);
   };
 
-  const handleUpdatedAt = (e) => {
-    setUpdatedAt(e.target.value);
-  };
-
-  const fetchReport = async () => {
+  const fetchReport = async (datefrom = '', dateto = '') => {
     try {
-      const response = await api.get('/report/p1', {
+      const { data } = await api.get('/report/p1', {
         params: {
-          createdAt,
-          updatedAt,
+          datefrom,
+          dateto,
         },
       });
+      setTotalByDate(data.totalByDate);
+      setDateAxis(data.date);
     } catch (error) {
       console.error('Error fetching report:', error);
     }
   };
 
   useEffect(() => {
-    if (createdAt && updatedAt) {
-      fetchReport();
-    }
-  }, [createdAt, updatedAt]);
+    fetchReport();
+  }, []);
 
   const options = {
     chart: {
       id: 'basic-bar',
     },
     xaxis: {
-      categories: reportData.map((item) => item.date),
+      categories: dateAxis,
     },
   };
 
   const series = [
     {
       name: 'Total Sales',
-      data: reportData.map((item) => item.totalSales),
+      data: totalByDate,
     },
   ];
-  console.log(reportData);
 
   return (
     <>
@@ -63,28 +59,27 @@ export const SalesReportPage = () => {
           <Sidebar />
         </div>
         <div className='flex-grow ml-4'>
+          <h1 className='font-sans font-bold text-center py-4 text-2xl'>
+            Graph Sales Data
+          </h1>
           <div className='my-4'>
-            <label className='text-gray-600 px-3'>Select date:</label>
+            <label className='font-sans font-semibold px-3'>Date from:</label>
             <input
+              id='datefrom-report-graphic'
               type='date'
-              value={createdAt}
-              onChange={handleCreatedAt}
+              onChange={handleQueryDate}
               className='px-2 py-1 border rounded-md border-gray-300'
             />
-            {/* <label className='text-gray-600 ml-4'>End Date:</label>
-            <span className='px-2'></span>
+          </div>
+          <div className='my-4'>
+            <label className='font-sans font-semibold px-3'>Date to:</label>
+            <span className='ml-5'></span>
             <input
+              id='dateto-report-graphic'
               type='date'
-              value={updatedAt}
-              onChange={handleUpdatedAt}
+              onChange={handleQueryDate}
               className='px-2 py-1 border rounded-md border-gray-300'
-            /> */}
-            {/* <button
-              onClick={fetchReport}
-              className='ml-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600'
-            >
-              Filter
-            </button> */}
+            />
           </div>
           <Chart options={options} series={series} type='bar' height='350' />
         </div>
