@@ -27,8 +27,6 @@ export const PostList = ({ isOpen, onOpen, onClose }) => {
 
   const fetchSearch = async () => {
     console.log('search', search);
-    console.log('sort', sort);
-    console.log('category', category);
     return api
       .get('/products/search', {
         params: {
@@ -39,7 +37,7 @@ export const PostList = ({ isOpen, onOpen, onClose }) => {
       })
       .then((res) => {
         setProducts(res.data.data);
-        console.log('tesssss', res.data.data);
+        console.log('data', res.data.data);
       })
       .catch((err) => console.log(err));
   };
