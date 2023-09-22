@@ -71,7 +71,7 @@ export const PostCard = ({ product, fetchProducts }) => {
         <td className='border px-4 py-2'>{product.productName}</td>
 
         <td className='border px-4 py-2 d-none d-sm-table-cell'>
-          {product.Category.category_name}
+          {product?.Category?.category_name}
         </td>
         <td className='border px-4 py-2 d-none d-sm-table-cell'>
           Rp. {product.price}
