@@ -70,7 +70,8 @@ export const ModalEditTransaction = ({
           Close
         </Button>
         <Button
-          className="bg-cyan-300 border-cyan-300 text-dark"
+          className="bg-[#D3A774] border-[#D3A774] text-dark"
+          variant="warning"
           onClick={async () => {
             handleChangeTransaction(
               document.getElementById("ordertype_selectoption").value,
