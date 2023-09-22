@@ -271,9 +271,9 @@ export const CashierLandingPage = () => {
     fetchCategories();
     fetchOutstandingTransaction();
 
-    return () => {
-      socketConnection.disconnect();
-    };
+    // return () => {
+    //   socketConnection.disconnect();
+    // };
   }, []);
 
   return (
